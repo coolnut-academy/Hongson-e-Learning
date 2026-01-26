@@ -14,11 +14,12 @@ import {
     Briefcase,
     Globe,
     ImageIcon,
-    Sparkles,
+    BookOpen,
+    BookMarked,
 } from "lucide-react";
 import { uploadImage } from "@/lib/storage";
 import { AppDocument } from "@/lib/firestore";
-import AppCard, { AppData } from "./AppCard";
+import AppCard from "./AppCard";
 
 type Zone = "student" | "teacher" | "both";
 
@@ -31,14 +32,14 @@ interface AppFormModalProps {
 
 // Gradient color options for apps without custom icons
 const GRADIENT_OPTIONS = [
+    { value: "from-violet-500 to-purple-600", label: "Purple Dream", preview: "bg-gradient-to-br from-violet-500 to-purple-600" },
+    { value: "from-emerald-500 to-teal-600", label: "Emerald", preview: "bg-gradient-to-br from-emerald-500 to-teal-600" },
     { value: "from-blue-500 to-cyan-500", label: "Blue Ocean", preview: "bg-gradient-to-br from-blue-500 to-cyan-500" },
-    { value: "from-purple-500 to-violet-600", label: "Purple Dream", preview: "bg-gradient-to-br from-purple-500 to-violet-600" },
-    { value: "from-green-500 to-emerald-600", label: "Green Forest", preview: "bg-gradient-to-br from-green-500 to-emerald-600" },
-    { value: "from-orange-500 to-amber-500", label: "Sunset", preview: "bg-gradient-to-br from-orange-500 to-amber-500" },
+    { value: "from-amber-500 to-orange-500", label: "Golden", preview: "bg-gradient-to-br from-amber-500 to-orange-500" },
     { value: "from-pink-500 to-rose-500", label: "Pink Bloom", preview: "bg-gradient-to-br from-pink-500 to-rose-500" },
-    { value: "from-indigo-500 to-blue-600", label: "Deep Indigo", preview: "bg-gradient-to-br from-indigo-500 to-blue-600" },
-    { value: "from-teal-500 to-cyan-600", label: "Teal Wave", preview: "bg-gradient-to-br from-teal-500 to-cyan-600" },
-    { value: "from-red-500 to-orange-500", label: "Fire", preview: "bg-gradient-to-br from-red-500 to-orange-500" },
+    { value: "from-indigo-500 to-violet-600", label: "Deep Indigo", preview: "bg-gradient-to-br from-indigo-500 to-violet-600" },
+    { value: "from-teal-500 to-emerald-600", label: "Teal Wave", preview: "bg-gradient-to-br from-teal-500 to-emerald-600" },
+    { value: "from-slate-600 to-slate-800", label: "Professional", preview: "bg-gradient-to-br from-slate-600 to-slate-800" },
     { value: "transparent", label: "Transparent", preview: "bg-white border-2 border-dashed border-slate-300" },
 ];
 
@@ -138,12 +139,12 @@ export default function AppFormModal({
 
         // Validation
         if (!name.trim()) {
-            setError("กรุณาใส่ชื่อแอป");
+            setError("กรุณาใส่ชื่อแหล่งเรียนรู้");
             return;
         }
 
         if (!url.trim()) {
-            setError("กรุณาใส่ URL ของแอป");
+            setError("กรุณาใส่ URL ของแหล่งเรียนรู้");
             return;
         }
 
@@ -188,8 +189,8 @@ export default function AppFormModal({
             {/* Modal */}
             <div className="relative z-10 w-full max-w-lg mx-4 animate-fade-in-up">
                 {/* Decorative blurs */}
-                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl" />
+                <div className="absolute -top-20 -left-20 w-40 h-40 bg-violet-500/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl" />
 
                 <div
                     className="relative overflow-hidden rounded-3xl"
@@ -200,7 +201,7 @@ export default function AppFormModal({
                     }}
                 >
                     {/* Header Gradient */}
-                    <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+                    <div className="h-1 bg-gradient-to-r from-violet-500 via-purple-500 to-emerald-500" />
 
                     {/* Close Button */}
                     <button
@@ -217,21 +218,21 @@ export default function AppFormModal({
                             <div
                                 className="w-12 h-12 rounded-xl flex items-center justify-center"
                                 style={{
-                                    background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
+                                    background: "linear-gradient(135deg, #8b5cf6 0%, #10b981 100%)",
                                 }}
                             >
                                 {isEditing ? (
-                                    <Sparkles className="w-6 h-6 text-white" />
+                                    <BookMarked className="w-6 h-6 text-white" />
                                 ) : (
-                                    <ImageIcon className="w-6 h-6 text-white" />
+                                    <BookOpen className="w-6 h-6 text-white" />
                                 )}
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold text-slate-800">
-                                    {isEditing ? "แก้ไขแอป" : "เพิ่มแอปใหม่"}
+                                    {isEditing ? "แก้ไขแหล่งเรียนรู้" : "เพิ่มแหล่งเรียนรู้ใหม่"}
                                 </h2>
                                 <p className="text-sm text-slate-500">
-                                    {isEditing ? "อัปเดตข้อมูลแอปพลิเคชัน" : "กรอกข้อมูลแอปพลิเคชันที่ต้องการเพิ่ม"}
+                                    {isEditing ? "อัปเดตข้อมูลแหล่งเรียนรู้หรือ E-Book" : "กรอกข้อมูล E-Book หรือแหล่งเรียนรู้ที่ต้องการเพิ่ม"}
                                 </p>
                             </div>
                         </div>
@@ -243,7 +244,7 @@ export default function AppFormModal({
                                 <AppCard
                                     app={{
                                         id: "preview",
-                                        name: name || "App Name",
+                                        name: name || "ชื่อแหล่งเรียนรู้",
                                         url: url || "#",
                                         iconUrl: previewFile || iconUrl || "",
                                         zone: zone,
@@ -260,15 +261,15 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
                                     <Type className="w-4 h-4 opacity-60" />
-                                    ชื่อแอป (รองรับ HTML เช่น &lt;br&gt; เพื่อขึ้นบรรทัดใหม่)
+                                    ชื่อแหล่งเรียนรู้ (รองรับ HTML เช่น &lt;br&gt; เพื่อขึ้นบรรทัดใหม่)
                                 </label>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    placeholder="เช่น Google Classroom"
+                                    placeholder="เช่น คู่มือการใช้งาน Google Classroom"
                                     disabled={isSubmitting}
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-purple-400 focus:ring-4 focus:ring-purple-100 outline-none transition-all bg-white/70 disabled:bg-slate-100"
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-violet-400 focus:ring-4 focus:ring-violet-100 outline-none transition-all bg-white/70 disabled:bg-slate-100"
                                 />
                             </div>
 
@@ -276,15 +277,15 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
                                     <LinkIcon className="w-4 h-4 opacity-60" />
-                                    URL
+                                    URL (ลิงก์ไปยังแหล่งเรียนรู้)
                                 </label>
                                 <input
                                     type="url"
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
-                                    placeholder="https://classroom.google.com"
+                                    placeholder="https://drive.google.com/file/..."
                                     disabled={isSubmitting}
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-purple-400 focus:ring-4 focus:ring-purple-100 outline-none transition-all bg-white/70 disabled:bg-slate-100"
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-violet-400 focus:ring-4 focus:ring-violet-100 outline-none transition-all bg-white/70 disabled:bg-slate-100"
                                 />
                             </div>
 
@@ -292,7 +293,7 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-3">
                                     <Users className="w-4 h-4 opacity-60" />
-                                    แสดงสำหรับ
+                                    แสดงในคลังความรู้
                                 </label>
                                 <div className="grid grid-cols-3 gap-3">
                                     {/* Student */}
@@ -301,7 +302,7 @@ export default function AppFormModal({
                                         onClick={() => setZone("student")}
                                         disabled={isSubmitting}
                                         className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "student"
-                                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                                            ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
@@ -314,7 +315,7 @@ export default function AppFormModal({
                                         onClick={() => setZone("teacher")}
                                         disabled={isSubmitting}
                                         className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "teacher"
-                                            ? "border-purple-500 bg-purple-50 text-purple-700"
+                                            ? "border-violet-500 bg-violet-50 text-violet-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
@@ -327,7 +328,7 @@ export default function AppFormModal({
                                         onClick={() => setZone("both")}
                                         disabled={isSubmitting}
                                         className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "both"
-                                            ? "border-green-500 bg-green-50 text-green-700"
+                                            ? "border-amber-500 bg-amber-50 text-amber-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
@@ -341,7 +342,7 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
                                     <ImageIcon className="w-4 h-4 opacity-60" />
-                                    ไอคอนแอป
+                                    ปกหนังสือ / ไอคอน
                                 </label>
                                 <div className="flex items-center gap-4">
                                     {/* Preview */}
@@ -350,7 +351,7 @@ export default function AppFormModal({
                                             } flex items-center justify-center bg-slate-50`}
                                     >
                                         {isUploading ? (
-                                            <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
+                                            <Loader2 className="w-6 h-6 text-violet-500 animate-spin" />
                                         ) : previewFile || iconUrl ? (
                                             <Image
                                                 src={previewFile || iconUrl}
@@ -362,9 +363,7 @@ export default function AppFormModal({
                                             />
                                         ) : (
                                             <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${color}`}>
-                                                <span className="text-xl font-bold text-white">
-                                                    {name ? name.charAt(0).toUpperCase() : "?"}
-                                                </span>
+                                                <BookOpen className="w-6 h-6 text-white" />
                                             </div>
                                         )}
                                     </div>
@@ -383,7 +382,7 @@ export default function AppFormModal({
                                             type="button"
                                             onClick={() => fileInputRef.current?.click()}
                                             disabled={isSubmitting || isUploading}
-                                            className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 hover:border-purple-300 hover:bg-purple-50 transition-all flex items-center justify-center gap-2 text-sm font-medium text-slate-600 disabled:opacity-50"
+                                            className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all flex items-center justify-center gap-2 text-sm font-medium text-slate-600 disabled:opacity-50"
                                         >
                                             <Upload className="w-4 h-4" />
                                             {isUploading ? "กำลังอัปโหลด..." : "อัปโหลดรูปภาพ"}
@@ -398,7 +397,7 @@ export default function AppFormModal({
                             {/* Color Selection (for fallback icon) */}
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
-                                    สีพื้นหลัง (ใช้เมื่อไม่มีไอคอน)
+                                    สีพื้นหลัง (ใช้เมื่อไม่มีปก)
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {GRADIENT_OPTIONS.map((option) => (
@@ -408,7 +407,7 @@ export default function AppFormModal({
                                             onClick={() => setColor(option.value)}
                                             disabled={isSubmitting}
                                             className={`w-8 h-8 rounded-lg ${option.preview} transition-all ${color === option.value
-                                                ? "ring-2 ring-offset-2 ring-purple-500 scale-110"
+                                                ? "ring-2 ring-offset-2 ring-violet-500 scale-110"
                                                 : "hover:scale-105"
                                                 }`}
                                             title={option.label}
@@ -431,8 +430,8 @@ export default function AppFormModal({
                                 disabled={isSubmitting || isUploading}
                                 className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all disabled:opacity-70 disabled:cursor-not-allowed hover:shadow-lg"
                                 style={{
-                                    background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
-                                    boxShadow: "0 8px 30px rgba(37, 99, 235, 0.4)",
+                                    background: "linear-gradient(135deg, #8b5cf6 0%, #10b981 100%)",
+                                    boxShadow: "0 8px 30px rgba(139, 92, 246, 0.4)",
                                 }}
                             >
                                 <span className="flex items-center justify-center gap-2">
@@ -444,7 +443,7 @@ export default function AppFormModal({
                                     ) : (
                                         <>
                                             <Save className="w-5 h-5" />
-                                            <span>{isEditing ? "บันทึกการแก้ไข" : "เพิ่มแอป"}</span>
+                                            <span>{isEditing ? "บันทึกการแก้ไข" : "เพิ่มแหล่งเรียนรู้"}</span>
                                         </>
                                     )}
                                 </span>

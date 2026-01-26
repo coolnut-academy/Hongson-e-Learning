@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink, Ban } from "lucide-react";
+import { ExternalLink, Ban, BookOpen } from "lucide-react";
 
 export interface AppData {
     id: string;
@@ -24,7 +24,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
 
     const handleClick = () => {
         if (!isEnabled) {
-            alert("แอปนี้ยังไม่เปิดใช้งาน");
+            alert("แหล่งเรียนรู้นี้ยังไม่เปิดให้บริการ");
             return;
         }
         window.open(app.url, "_blank", "noopener,noreferrer");
@@ -42,7 +42,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                     <div
                         className="absolute -inset-3 rounded-3xl blur-2xl opacity-0 group-hover:opacity-50 transition-all duration-500"
                         style={{
-                            background: `linear-gradient(135deg, rgba(14, 165, 233, 0.5) 0%, rgba(168, 85, 247, 0.5) 100%)`,
+                            background: `linear-gradient(135deg, rgba(139, 92, 246, 0.5) 0%, rgba(16, 185, 129, 0.5) 100%)`,
                         }}
                     />
                 )}
@@ -57,7 +57,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                         ${!isTransparent && "border border-white/40 shadow-xl shadow-black/5"}
                         transition-all duration-500 ease-out
                         ${isEnabled
-                            ? "group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-cyan-500/20 group-active:scale-98"
+                            ? "group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-violet-500/20 group-active:scale-98"
                             : "opacity-60"
                         }`}
                     style={{
@@ -90,16 +90,14 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                                 priority={priority}
                             />
                         ) : (
-                            // Fallback gradient icon with first letter
+                            // Fallback gradient icon with book icon
                             <div
                                 className={`w-full h-full flex items-center justify-center ${isEnabled
-                                    ? "bg-gradient-to-br from-cyan-400/90 to-purple-500/90"
+                                    ? "bg-gradient-to-br from-violet-400/90 to-emerald-500/90"
                                     : "bg-slate-400"
                                     }`}
                             >
-                                <span className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
-                                    {app.name.replace(/<[^>]*>/g, '').charAt(0).toUpperCase()}
-                                </span>
+                                <BookOpen className="w-10 h-10 text-white drop-shadow-lg" />
                             </div>
                         )}
                     </div>
@@ -133,7 +131,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                         <div
                             className="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                             style={{
-                                background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.3) 0%, transparent 30%, transparent 70%, rgba(168, 85, 247, 0.3) 100%)',
+                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, transparent 30%, transparent 70%, rgba(16, 185, 129, 0.3) 100%)',
                             }}
                         />
                     )}
@@ -144,7 +142,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                     <div
                         className="absolute inset-x-4 -bottom-3 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         style={{
-                            background: 'radial-gradient(ellipse at center, rgba(14, 165, 233, 0.15) 0%, transparent 70%)',
+                            background: 'radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
                             filter: 'blur(8px)',
                         }}
                     />
@@ -165,7 +163,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
                     <div
                         className="absolute inset-0 -z-10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
-                            background: 'radial-gradient(ellipse at center, rgba(14, 165, 233, 0.1) 0%, transparent 70%)',
+                            background: 'radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
                             filter: 'blur(8px)',
                         }}
                     />

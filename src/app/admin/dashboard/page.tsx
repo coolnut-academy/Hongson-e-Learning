@@ -4,16 +4,16 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
-    LayoutDashboard,
+    Library,
     LogOut,
     Plus,
     Loader2,
-    Sparkles,
+    BookOpen,
     Pencil,
     Trash2,
     ChevronUp,
     ChevronDown,
-    AppWindow,
+    BookMarked,
     GraduationCap,
     Briefcase,
     Globe,
@@ -99,20 +99,20 @@ function ZoneBadge({ zone }: { zone: "student" | "teacher" | "both" }) {
         student: {
             icon: GraduationCap,
             label: "นักเรียน",
-            bg: "bg-blue-100",
-            text: "text-blue-700",
+            bg: "bg-emerald-100",
+            text: "text-emerald-700",
         },
         teacher: {
             icon: Briefcase,
             label: "ครู",
-            bg: "bg-purple-100",
-            text: "text-purple-700",
+            bg: "bg-violet-100",
+            text: "text-violet-700",
         },
         both: {
             icon: Globe,
             label: "ทั้งหมด",
-            bg: "bg-green-100",
-            text: "text-green-700",
+            bg: "bg-amber-100",
+            text: "text-amber-700",
         },
     };
 
@@ -147,7 +147,7 @@ export default function AdminDashboard() {
             setError("");
         } catch (err) {
             console.error("Failed to fetch apps:", err);
-            setError("ไม่สามารถโหลดข้อมูลแอปได้");
+            setError("ไม่สามารถโหลดข้อมูลแหล่งเรียนรู้ได้");
         }
     }, []);
 
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
             setDeleteConfirm(null);
         } catch (err) {
             console.error("Delete failed:", err);
-            setError("ลบแอปไม่สำเร็จ");
+            setError("ลบแหล่งเรียนรู้ไม่สำเร็จ");
         } finally {
             setIsDeleting(false);
         }
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
             await fetchApps();
         } catch (err) {
             console.error("Toggle enabled failed:", err);
-            setError("เปลี่ยนสถานะแอปไม่สำเร็จ");
+            setError("เปลี่ยนสถานะแหล่งเรียนรู้ไม่สำเร็จ");
         } finally {
             setIsToggling(null);
         }
@@ -266,7 +266,7 @@ export default function AdminDashboard() {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
                 <div className="text-center">
-                    <Loader2 className="w-12 h-12 animate-spin text-purple-500 mx-auto mb-4" />
+                    <Loader2 className="w-12 h-12 animate-spin text-violet-500 mx-auto mb-4" />
                     <p className="text-slate-500">กำลังตรวจสอบสิทธิ์...</p>
                 </div>
             </div>
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
                             <div className="relative">
                                 <Image
                                     src="/logo.png?v=2"
-                                    alt="HONGSON METAVERSE MODEL Logo"
+                                    alt="Hongson e-Learning Logo"
                                     width={48}
                                     height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
@@ -293,9 +293,9 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <h1 className="text-lg font-bold text-gradient">
-                                    Admin Dashboard
+                                    ศูนย์จัดการคลังความรู้
                                 </h1>
-                                <p className="text-xs text-slate-500">HONGSON THE ONE</p>
+                                <p className="text-xs text-slate-500">Hongson e-Learning</p>
                             </div>
                         </div>
 
@@ -331,11 +331,11 @@ export default function AdminDashboard() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                     <div>
                         <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                            <AppWindow className="w-7 h-7 text-purple-600" />
-                            จัดการแอปพลิเคชัน
+                            <Library className="w-7 h-7 text-violet-600" />
+                            จัดการแหล่งเรียนรู้
                         </h2>
                         <p className="text-slate-500 mt-1">
-                            เพิ่ม แก้ไข ลบ หรือเรียงลำดับแอปที่แสดงบนหน้าหลัก
+                            เพิ่ม แก้ไข ลบ หรือเรียงลำดับแหล่งเรียนรู้และ E-Book ที่แสดงในคลังความรู้
                         </p>
                     </div>
 
@@ -344,12 +344,12 @@ export default function AdminDashboard() {
                         onClick={openAddModal}
                         className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all hover:shadow-lg hover:-translate-y-0.5"
                         style={{
-                            background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
-                            boxShadow: "0 8px 30px rgba(37, 99, 235, 0.4)",
+                            background: "linear-gradient(135deg, #8b5cf6 0%, #10b981 100%)",
+                            boxShadow: "0 8px 30px rgba(139, 92, 246, 0.4)",
                         }}
                     >
                         <Plus className="w-5 h-5" />
-                        เพิ่มแอปใหม่
+                        เพิ่มแหล่งเรียนรู้ใหม่
                     </button>
                 </div>
 
@@ -367,20 +367,20 @@ export default function AdminDashboard() {
                         /* Empty State */
                         <div className="p-12 text-center">
                             <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
-                                <Sparkles className="w-10 h-10 text-slate-400" />
+                                <BookOpen className="w-10 h-10 text-slate-400" />
                             </div>
                             <h3 className="text-lg font-semibold text-slate-700 mb-2">
-                                ยังไม่มีแอปพลิเคชัน
+                                ยังไม่มีแหล่งเรียนรู้
                             </h3>
                             <p className="text-slate-500 mb-6">
-                                เริ่มต้นด้วยการเพิ่มแอปแรกของคุณ
+                                เริ่มต้นด้วยการเพิ่มแหล่งเรียนรู้หรือ E-Book แรกของคุณ
                             </p>
                             <button
                                 onClick={openAddModal}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-100 text-purple-700 font-medium hover:bg-purple-200 transition-all"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-100 text-violet-700 font-medium hover:bg-violet-200 transition-all"
                             >
                                 <Plus className="w-5 h-5" />
-                                เพิ่มแอปใหม่
+                                เพิ่มแหล่งเรียนรู้ใหม่
                             </button>
                         </div>
                     ) : (
@@ -389,8 +389,8 @@ export default function AdminDashboard() {
                             {/* Table Header (Desktop) */}
                             <div className="hidden md:grid md:grid-cols-14 gap-4 px-6 py-3 bg-slate-50/50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 <div className="col-span-1 text-center">#</div>
-                                <div className="col-span-4">แอป</div>
-                                <div className="col-span-2">โซน</div>
+                                <div className="col-span-4">แหล่งเรียนรู้</div>
+                                <div className="col-span-2">คลังความรู้</div>
                                 <div className="col-span-2 text-center">สถานะ</div>
                                 <div className="col-span-2 text-center">เรียงลำดับ</div>
                                 <div className="col-span-3 text-right">การจัดการ</div>
@@ -413,7 +413,7 @@ export default function AdminDashboard() {
                                     <div className="md:col-span-4 flex items-center gap-4">
                                         {/* Icon */}
                                         <div
-                                            className={`w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 shadow-md bg-gradient-to-br ${app.color || "from-blue-500 to-purple-500"
+                                            className={`w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 shadow-md bg-gradient-to-br ${app.color || "from-violet-500 to-emerald-500"
                                                 }`}
                                         >
                                             {app.iconUrl ? (
@@ -427,9 +427,7 @@ export default function AdminDashboard() {
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center">
-                                                    <span className="text-lg font-bold text-white">
-                                                        {app.name.charAt(0).toUpperCase()}
-                                                    </span>
+                                                    <BookMarked className="w-6 h-6 text-white" />
                                                 </div>
                                             )}
                                         </div>
@@ -456,7 +454,7 @@ export default function AdminDashboard() {
                                             disabled={isToggling === app.id}
                                             className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all ${app.isEnabled === false
                                                 ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
-                                                : "bg-green-100 text-green-700 hover:bg-green-200"
+                                                : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                                                 } disabled:opacity-50`}
                                             title={app.isEnabled === false ? "เปิดใช้งาน" : "ปิดใช้งาน"}
                                         >
@@ -505,7 +503,7 @@ export default function AdminDashboard() {
                                     <div className="md:col-span-3 flex items-center justify-end gap-2">
                                         <button
                                             onClick={() => openEditModal(app)}
-                                            className="p-2.5 rounded-xl text-blue-600 bg-blue-50 hover:bg-blue-100 transition-all"
+                                            className="p-2.5 rounded-xl text-violet-600 bg-violet-50 hover:bg-violet-100 transition-all"
                                             title="แก้ไข"
                                         >
                                             <Pencil className="w-4 h-4" />
@@ -528,16 +526,16 @@ export default function AdminDashboard() {
                 {apps.length > 0 && (
                     <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-500">
                         <div className="flex items-center gap-2">
-                            <AppWindow className="w-4 h-4" />
-                            <span>รวมทั้งหมด: <strong className="text-slate-700">{apps.length}</strong> แอป</span>
+                            <BookMarked className="w-4 h-4" />
+                            <span>รวมทั้งหมด: <strong className="text-slate-700">{apps.length}</strong> รายการ</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <GraduationCap className="w-4 h-4 text-blue-500" />
-                            <span>นักเรียน: <strong className="text-slate-700">{apps.filter(a => a.zone === "student" || a.zone === "both").length}</strong></span>
+                            <GraduationCap className="w-4 h-4 text-emerald-500" />
+                            <span>คลังนักเรียน: <strong className="text-slate-700">{apps.filter(a => a.zone === "student" || a.zone === "both").length}</strong></span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-purple-500" />
-                            <span>ครู: <strong className="text-slate-700">{apps.filter(a => a.zone === "teacher" || a.zone === "both").length}</strong></span>
+                            <Briefcase className="w-4 h-4 text-violet-500" />
+                            <span>คลังครู: <strong className="text-slate-700">{apps.filter(a => a.zone === "teacher" || a.zone === "both").length}</strong></span>
                         </div>
                     </div>
                 )}

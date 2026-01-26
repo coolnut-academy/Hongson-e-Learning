@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 /* ============================================
-   HONGSON THE ONE - Liquid Glass iOS 26 Design System
+   HONGSON e-Learning - คลังความรู้ Liquid Glass Design System
    ============================================ */
 
 /* CSS Custom Properties for Liquid Glass theming */
 :root {
-  --background: #f0f4f8;
+  --background: #f8fafc;
   --foreground: #0f172a;
-  --primary-start: #0ea5e9;
-  --primary-end: #a855f7;
+  --primary-start: #8b5cf6;
+  --primary-end: #10b981;
 
   /* Liquid Glass Variables */
   --glass-bg: rgba(255, 255, 255, 0.25);
@@ -29,10 +29,10 @@
       rgba(255, 255, 255, 0.1) 30%,
       rgba(255, 255, 255, 0) 50%);
 
-  /* Liquid Edge Glow */
-  --liquid-glow-cyan: rgba(34, 211, 238, 0.4);
-  --liquid-glow-purple: rgba(168, 85, 247, 0.4);
-  --liquid-glow-pink: rgba(236, 72, 153, 0.3);
+  /* Liquid Edge Glow - e-Learning Theme */
+  --liquid-glow-violet: rgba(139, 92, 246, 0.4);
+  --liquid-glow-emerald: rgba(16, 185, 129, 0.4);
+  --liquid-glow-amber: rgba(245, 158, 11, 0.3);
 }
 
 /* Tailwind v4 Theme Configuration */
@@ -228,13 +228,48 @@
 
 /* Base Styles */
 body {
-  background: var(--background);
+  background: linear-gradient(135deg,
+      #f8fafc 0%,
+      #f1f5f9 25%,
+      #ede9fe 50%,
+      #ecfdf5 75%,
+      #f8fafc 100%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-kanit), "Kanit", Arial, sans-serif;
   min-height: 100vh;
 }
 
-/* Premium Text Gradient Utility */
+/* Animation Utility Classes */
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-float {
+  animation: float 10s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+/* Premium Text Gradient Utility - e-Learning Theme */
 .text-gradient {
   background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
   -webkit-background-clip: text;
@@ -244,11 +279,11 @@ body {
 
 .text-gradient-animated {
   background: linear-gradient(135deg,
-      #0ea5e9 0%,
+      #8b5cf6 0%,
       #a855f7 25%,
-      #ec4899 50%,
+      #10b981 50%,
       #a855f7 75%,
-      #0ea5e9 100%);
+      #8b5cf6 100%);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -369,16 +404,16 @@ body {
     inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
-/* Liquid Glass Primary Button */
+/* Liquid Glass Primary Button - e-Learning Theme */
 .glass-button-primary {
   background: linear-gradient(135deg,
-      rgba(14, 165, 233, 0.85) 0%,
-      rgba(168, 85, 247, 0.85) 100%);
+      rgba(139, 92, 246, 0.85) 0%,
+      rgba(16, 185, 129, 0.85) 100%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow:
-    0 8px 32px rgba(14, 165, 233, 0.35),
+    0 8px 32px rgba(139, 92, 246, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.4),
     inset 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -392,11 +427,11 @@ body {
 
 .glass-button-primary:hover {
   background: linear-gradient(135deg,
-      rgba(14, 165, 233, 0.95) 0%,
-      rgba(168, 85, 247, 0.95) 100%);
+      rgba(139, 92, 246, 0.95) 0%,
+      rgba(16, 185, 129, 0.95) 100%);
   box-shadow:
-    0 12px 40px rgba(14, 165, 233, 0.45),
-    0 0 60px var(--liquid-glow-cyan),
+    0 12px 40px rgba(139, 92, 246, 0.45),
+    0 0 60px var(--liquid-glow-violet),
     inset 0 1px 1px rgba(255, 255, 255, 0.5);
   transform: translateY(-3px) scale(1.02);
 }
@@ -536,12 +571,12 @@ body {
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* Premium Button Styles - Liquid Glass Version */
+/* Premium Button Styles - e-Learning Liquid Glass Version */
 .btn-primary {
   position: relative;
   background: linear-gradient(135deg,
-      rgba(14, 165, 233, 0.9) 0%,
-      rgba(168, 85, 247, 0.9) 100%);
+      rgba(139, 92, 246, 0.9) 0%,
+      rgba(16, 185, 129, 0.9) 100%);
   color: white;
   padding: 1rem 2.5rem;
   border-radius: 18px;
@@ -550,7 +585,7 @@ body {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow:
-    0 8px 32px rgba(14, 165, 233, 0.4),
+    0 8px 32px rgba(139, 92, 246, 0.4),
     inset 0 1px 1px rgba(255, 255, 255, 0.4),
     inset 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -586,9 +621,9 @@ body {
 .btn-primary:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow:
-    0 16px 48px rgba(14, 165, 233, 0.5),
-    0 0 60px var(--liquid-glow-cyan),
-    0 0 80px var(--liquid-glow-purple),
+    0 16px 48px rgba(139, 92, 246, 0.5),
+    0 0 60px var(--liquid-glow-violet),
+    0 0 80px var(--liquid-glow-emerald),
     inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
@@ -694,13 +729,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(14, 165, 233, 0.7), rgba(168, 85, 247, 0.7));
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.7), rgba(16, 185, 129, 0.7));
   border-radius: 5px;
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(14, 165, 233, 0.9), rgba(168, 85, 247, 0.9));
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.9), rgba(16, 185, 129, 0.9));
 }
 
 /* Liquid Glass Utility Classes */
@@ -929,23 +964,23 @@ body {
 }
 
 /* ============================================
-   TITLE BADGE STYLES (HONGSON THE ONE)
+   TITLE BADGE STYLES (HONGSON e-Learning)
    ============================================ */
 
-/* Title Badge Main Styling - Matching Developer Badge Style */
+/* Title Badge Main Styling - e-Learning Theme */
 .title-badge {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px 6px 8px;
   background: linear-gradient(135deg,
-      rgba(14, 165, 233, 0.9) 0%,
-      rgba(99, 102, 241, 0.9) 50%,
-      rgba(168, 85, 247, 0.9) 100%);
+      rgba(139, 92, 246, 0.9) 0%,
+      rgba(124, 58, 237, 0.9) 50%,
+      rgba(16, 185, 129, 0.9) 100%);
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow:
-    0 6px 24px rgba(14, 165, 233, 0.35),
+    0 6px 24px rgba(139, 92, 246, 0.35),
     0 3px 12px rgba(0, 0, 0, 0.1),
     inset 0 1px 1px rgba(255, 255, 255, 0.5),
     inset 0 -1px 2px rgba(0, 0, 0, 0.1);
@@ -974,9 +1009,9 @@ body {
 .title-badge:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow:
-    0 10px 32px rgba(14, 165, 233, 0.45),
+    0 10px 32px rgba(139, 92, 246, 0.45),
     0 5px 16px rgba(0, 0, 0, 0.12),
-    0 0 40px rgba(99, 102, 241, 0.2),
+    0 0 40px rgba(16, 185, 129, 0.2),
     inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
