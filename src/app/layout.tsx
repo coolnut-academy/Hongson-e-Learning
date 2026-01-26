@@ -13,19 +13,20 @@ const kanit = Kanit({
 // SEO Metadata Configuration
 export const metadata: Metadata = {
   title: {
-    default: "HONGSON THE ONE | Web App Center",
-    template: "%s | HONGSON THE ONE",
+    default: "Hongson e-Learning - คลังความรู้ดิจิทัล",
+    template: "%s | Hongson e-Learning",
   },
   description:
-    "ศูนย์รวมเว็บแอปพลิเคชันสำหรับครูและนักเรียนโรงเรียนห้องสอนศึกษา ในพระอุปถัมภ์ฯ - Web App Center for Teachers and Students",
+    "แหล่งรวมสื่อการสอนและบทเรียนออนไลน์สำหรับครูและนักเรียน",
   keywords: [
-    "school links",
-    "education",
-    "HONGSON THE ONE",
-    "web app center",
-    "school portal",
-    "ห้องสอนศึกษา ในพระอุปถัมภ์ฯ",
-    "แอปการศึกษา",
+    "e-learning",
+    "online courses",
+    "hongson e-learning",
+    "knowledge repository",
+    "digital library",
+    "ห้องสอนศึกษา",
+    "สื่อการสอน",
+    "บทเรียนออนไลน์",
     "ครู",
     "นักเรียน",
   ],
@@ -46,24 +47,24 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "HONGSON THE ONE | Web App Center",
-    description: "ศูนย์รวมเว็บแอปพลิเคชันสำหรับครูและนักเรียนโรงเรียนห้องสอนศึกษา",
+    title: "Hongson e-Learning - คลังความรู้ดิจิทัล",
+    description: "คลังความรู้และสื่อการสอนดิจิทัลสำหรับครูและนักเรียน",
     type: "website",
     locale: "th_TH",
-    siteName: "HONGSON THE ONE",
+    siteName: "Hongson e-Learning",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "HONGSON THE ONE - Web App Center",
+        alt: "Hongson e-Learning - Digital Knowledge Repository",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HONGSON THE ONE | Web App Center",
-    description: "ศูนย์รวมเว็บแอปพลิเคชันสำหรับครูและนักเรียนโรงเรียนห้องสอนศึกษา",
+    title: "Hongson e-Learning - คลังความรู้ดิจิทัล",
+    description: "คลังความรู้และสื่อการสอนดิจิทัลสำหรับครูและนักเรียน",
     images: ["/og-image.png"],
   },
 };

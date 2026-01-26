@@ -86,7 +86,7 @@ export default function HomeContent() {
                             <div className="relative p-1 rounded-2xl bg-white/30 backdrop-blur-xl border border-white/50 shadow-lg">
                                 <Image
                                     src="/logo.png"
-                                    alt="HONGSON METAVERSE MODEL Logo"
+                                    alt="Hongson e-Learning Logo"
                                     width={48}
                                     height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-xl"
@@ -121,8 +121,8 @@ export default function HomeContent() {
 
                                 {/* Text Content */}
                                 <div className="title-badge-content">
-                                    <span className="title-badge-label">Web App Center</span>
-                                    <span className="title-badge-name">HONGSON THE ONE</span>
+                                    <span className="title-badge-label">คลังความรู้ไร้ขีดจำกัด เพื่อการเรียนรู้ตลอดชีวิต</span>
+                                    <span className="title-badge-name">Hongson e-Learning</span>
                                 </div>
 
                                 {/* Sparkle Icon */}
