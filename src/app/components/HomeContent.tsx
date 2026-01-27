@@ -89,7 +89,7 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
     return (
         <button
             onClick={handleClick}
-            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-150px] ${isEnabled
+            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-165px] ${isEnabled
                 ? "bg-white/70 hover:bg-white/90 hover:shadow-xl cursor-pointer"
                 : "bg-gray-100/50 cursor-not-allowed opacity-60"
                 }`}
