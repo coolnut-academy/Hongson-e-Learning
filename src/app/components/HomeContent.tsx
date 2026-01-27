@@ -89,7 +89,7 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
     return (
         <button
             onClick={handleClick}
-            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-[180px] ${isEnabled
+            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-150px] ${isEnabled
                 ? "bg-white/70 hover:bg-white/90 hover:shadow-xl cursor-pointer"
                 : "bg-gray-100/50 cursor-not-allowed opacity-60"
                 }`}
@@ -475,7 +475,7 @@ export default function HomeContent() {
                             <div className="flex flex-col items-center">
                                 <div className="inline-flex flex-col items-center justify-center px-8 py-3 rounded-2xl bg-gradient-to-r from-slate-100 via-white to-slate-100 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-xl relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-purple-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                                    <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent text-center relative z-10">
+                                    <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent text-center relative z-10">
                                         คลังสื่อการเรียนรู้ออนไลน์
                                     </h2>
                                     <span className="text-sm sm:text-base font-medium text-slate-500 mt-1 relative z-10 tracking-wide">
