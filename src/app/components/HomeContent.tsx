@@ -89,7 +89,7 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
     return (
         <button
             onClick={handleClick}
-            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-165px] ${isEnabled
+            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-170px] ${isEnabled
                 ? "bg-white/70 hover:bg-white/90 hover:shadow-xl cursor-pointer"
                 : "bg-gray-100/50 cursor-not-allowed opacity-60"
                 }`}
@@ -263,7 +263,7 @@ function CategorySection({ category, apps }: { category: SubjectCategory; apps: 
             {/* Apps Grid - Collapsible Content */}
             {isOpen && (
                 <div className={`p-4 pt-2 border-t ${colors.border} animate-in slide-in-from-top-2 duration-200`}>
-                    <div className="flex flex-wrap justify-start gap-4 sm:gap-6">
+                    <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
                         {apps.map((app, index) => (
                             <div
                                 key={app.id}
