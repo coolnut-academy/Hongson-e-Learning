@@ -283,12 +283,11 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-3">
                             <div className="relative">
                                 <Image
-                                    src="/logo.png?v=2"
+                                    src="/logo-main.png"
                                     alt="Hongson e-Learning Logo"
                                     width={48}
                                     height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
-                                    unoptimized
                                 />
                             </div>
                             <div>

@@ -99,22 +99,34 @@ export default function RootLayout({
           {/* Base gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-cyan-50/50 to-purple-50/60" />
 
-          {/* Animated Liquid Orbs for Depth */}
+          {/* Animated Liquid Orbs for Depth - Green Theme */}
           <div
-            className="liquid-orb liquid-orb-cyan absolute -left-[20%] top-[10%] w-[50%] h-[50%]"
-            style={{ animationDelay: '0s' }}
+            className="liquid-orb absolute -left-[20%] top-[10%] w-[50%] h-[50%]"
+            style={{
+              animationDelay: '0s',
+              background: 'radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)' // Emerald
+            }}
           />
           <div
-            className="liquid-orb liquid-orb-purple absolute -right-[15%] top-[30%] w-[45%] h-[45%]"
-            style={{ animationDelay: '-4s' }}
+            className="liquid-orb absolute -right-[15%] top-[30%] w-[45%] h-[45%]"
+            style={{
+              animationDelay: '-4s',
+              background: 'radial-gradient(circle, rgba(52, 211, 153, 0.3) 0%, transparent 70%)' // Emerald-400
+            }}
           />
           <div
-            className="liquid-orb liquid-orb-pink absolute left-[30%] -bottom-[20%] w-[40%] h-[40%]"
-            style={{ animationDelay: '-7s' }}
+            className="liquid-orb absolute left-[30%] -bottom-[20%] w-[40%] h-[40%]"
+            style={{
+              animationDelay: '-7s',
+              background: 'radial-gradient(circle, rgba(110, 231, 183, 0.3) 0%, transparent 70%)' // Emerald-300
+            }}
           />
           <div
-            className="liquid-orb liquid-orb-cyan absolute right-[20%] top-[60%] w-[35%] h-[35%] opacity-30"
-            style={{ animationDelay: '-2s' }}
+            className="liquid-orb absolute right-[20%] top-[60%] w-[35%] h-[35%] opacity-30"
+            style={{
+              animationDelay: '-2s',
+              background: 'radial-gradient(circle, rgba(167, 243, 208, 0.4) 0%, transparent 70%)' // Emerald-200
+            }}
           />
 
           {/* Subtle Noise Texture Overlay */}

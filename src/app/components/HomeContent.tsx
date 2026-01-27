@@ -4,22 +4,61 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
-    BookOpen,
     Lock,
     Loader2,
-    RefreshCw,
-    GraduationCap,
-    Search,
     Sparkles,
     Library,
-    BookMarked
+    BookOpen,
+    Calculator,
+    Atom,
+    Globe,
+    Languages,
+    Heart,
+    Palette,
+    Briefcase,
+    Compass,
+    MoreHorizontal,
+    Download,
+    ArrowDown,
+    ArrowUp,
+    Database,
+    ChevronDown,
+    ChevronRight,
+    Lightbulb,
 } from "lucide-react";
-import AppGrid from "./AppGrid";
 import { AppData } from "./AppCard";
 import AdminLoginModal from "./AdminLoginModal";
-import { getApps, AppDocument } from "@/lib/firestore";
+import { getApps, AppDocument, SubjectCategory, CATEGORY_NAMES, initializeDatabase } from "@/lib/firestore";
 
 type Zone = "student" | "teacher";
+
+// Icon mapping for each category
+const CATEGORY_ICONS: Record<SubjectCategory, React.ElementType> = {
+    general: Lightbulb,
+    thai: BookOpen,
+    math: Calculator,
+    science: Atom,
+    social: Globe,
+    foreign: Languages,
+    guidance: Compass,
+    health: Heart,
+    arts: Palette,
+    career: Briefcase,
+};
+
+// Order of categories for display
+const CATEGORY_ORDER: SubjectCategory[] = [
+    "general",
+    "science",
+    "arts",
+    "thai",
+    "social",
+    "math",
+    "foreign",
+    "guidance",
+    "health",
+    "career",
+];
 
 // Convert Firestore AppDocument to AppData format
 function toAppData(doc: AppDocument): AppData {
@@ -29,168 +68,280 @@ function toAppData(doc: AppDocument): AppData {
         url: doc.url,
         iconUrl: doc.iconUrl,
         zone: doc.zone,
+        category: doc.category,
         color: doc.color,
         isEnabled: doc.isEnabled !== false,
     };
 }
 
-// Decorative Floating Bubble Component
-function FloatingBubble({
-    size,
-    position,
-    color,
-    delay = 0
-}: {
-    size: number;
-    position: { top?: string; bottom?: string; left?: string; right?: string };
-    color: "violet" | "emerald" | "white";
-    delay?: number;
-}) {
-    const colorClasses = {
-        violet: "from-violet-300/30 to-purple-400/20",
-        emerald: "from-emerald-300/30 to-teal-400/20",
-        white: "from-white/40 to-white/20"
+// E-Book Card Component - สื่อการเรียนรู้แต่ละรายการ
+function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean }) {
+    const isEnabled = app.isEnabled !== false;
+
+    const handleClick = () => {
+        if (!isEnabled) {
+            alert("สื่อการเรียนรู้นี้ยังไม่เปิดให้บริการ");
+            return;
+        }
+        window.open(app.url, "_blank", "noopener,noreferrer");
     };
 
     return (
-        <div
-            className={`absolute rounded-full bg-gradient-to-br ${colorClasses[color]} backdrop-blur-sm border border-white/30 animate-float pointer-events-none`}
-            style={{
-                width: size,
-                height: size,
-                ...position,
-                animationDelay: `${delay}s`,
-            }}
-        >
-            {/* Inner specular highlight */}
-            <div
-                className="absolute top-1 left-1 w-1/3 h-1/3 rounded-full bg-white/50 blur-sm"
-            />
-        </div>
-    );
-}
-
-// Zone Card Component (New Design)
-function ZoneCard({
-    zone,
-    isActive,
-    onClick,
-    count
-}: {
-    zone: Zone;
-    isActive: boolean;
-    onClick: () => void;
-    count: number;
-}) {
-    const isTeacher = zone === "teacher";
-
-    return (
         <button
-            onClick={onClick}
-            className={`
-                relative flex-1 min-h-[140px] sm:min-h-[160px] p-5 sm:p-6 rounded-3xl
-                transition-all duration-500 ease-out
-                ${isActive
-                    ? 'scale-[1.02] shadow-2xl'
-                    : 'hover:scale-[1.01] hover:shadow-xl opacity-80 hover:opacity-100'
-                }
-                overflow-hidden group
-            `}
+            onClick={handleClick}
+            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-[180px] ${isEnabled
+                ? "bg-white/70 hover:bg-white/90 hover:shadow-xl cursor-pointer"
+                : "bg-gray-100/50 cursor-not-allowed opacity-60"
+                }`}
             style={{
-                background: isActive
-                    ? isTeacher
-                        ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(124, 58, 237, 0.85) 100%)'
-                        : 'linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.85) 100%)'
-                    : 'rgba(255, 255, 255, 0.4)',
-                backdropFilter: 'blur(20px)',
-                border: isActive
-                    ? '1px solid rgba(255, 255, 255, 0.4)'
-                    : '1px solid rgba(255, 255, 255, 0.5)',
-                boxShadow: isActive
-                    ? isTeacher
-                        ? '0 20px 50px rgba(139, 92, 246, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4)'
-                        : '0 20px 50px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4)'
-                    : '0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.7)",
+                boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.9)",
             }}
+            disabled={!isEnabled}
         >
-            {/* Specular Highlight */}
-            <div
-                className="absolute top-0 left-0 right-0 h-1/2 rounded-t-3xl pointer-events-none"
-                style={{
-                    background: 'linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 40%, transparent 100%)',
-                }}
-            />
-
-            {/* Content */}
-            <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-center">
-                {/* Icon */}
-                <div
-                    className={`
-                        w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center
-                        transition-all duration-300
-                        ${isActive
-                            ? 'bg-white/25 shadow-lg'
-                            : isTeacher
-                                ? 'bg-violet-100 group-hover:bg-violet-200'
-                                : 'bg-emerald-100 group-hover:bg-emerald-200'
-                        }
-                    `}
-                >
-                    {isTeacher ? (
-                        <BookOpen className={`w-7 h-7 sm:w-8 sm:h-8 ${isActive ? 'text-white' : 'text-violet-600'}`} />
-                    ) : (
-                        <GraduationCap className={`w-7 h-7 sm:w-8 sm:h-8 ${isActive ? 'text-white' : 'text-emerald-600'}`} />
-                    )}
-                </div>
-
-                {/* Title */}
-                <div>
-                    <h3 className={`text-base sm:text-lg font-bold ${isActive ? 'text-white' : 'text-slate-700'}`}>
-                        คลังความรู้
-                    </h3>
-                    <p className={`text-sm sm:text-base font-semibold ${isActive ? 'text-white/90' : isTeacher ? 'text-violet-600' : 'text-emerald-600'}`}>
-                        {isTeacher ? 'สำหรับครู' : 'สำหรับนักเรียน'}
-                    </p>
-                </div>
-
-                {/* Count Badge */}
-                <span
-                    className={`
-                        px-3 py-1 rounded-full text-xs font-medium
-                        ${isActive
-                            ? 'bg-white/25 text-white'
-                            : isTeacher
-                                ? 'bg-violet-100 text-violet-700'
-                                : 'bg-emerald-100 text-emerald-700'
-                        }
-                    `}
-                >
-                    {count} รายการ
-                </span>
+            {/* Image/Icon Container - Adjusted for Full Cover Look */}
+            <div className="w-full aspect-[1/1] mb-3 rounded-xl relative overflow-hidden bg-emerald-50/50 border border-emerald-100/50 transition-all duration-300 group-hover:shadow-md">
+                {app.iconUrl && (app.iconUrl.startsWith("http") || app.iconUrl.startsWith("/") || app.iconUrl.startsWith("data:")) ? (
+                    <Image
+                        src={app.iconUrl}
+                        alt={app.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        priority={priority}
+                        sizes="(max-width: 768px) 50vw, 20vw"
+                    />
+                ) : (
+                    <div className="flex items-center justify-center w-full h-full">
+                        <BookOpen className="w-8 h-8 sm:w-8 sm:h-8 text-emerald-300/50" />
+                    </div>
+                )}
             </div>
 
-            {/* Ambient glow when active */}
-            {isActive && (
-                <div
-                    className="absolute inset-0 -z-10 rounded-3xl blur-3xl opacity-50"
-                    style={{
-                        background: isTeacher
-                            ? 'rgba(139, 92, 246, 0.6)'
-                            : 'rgba(16, 185, 129, 0.6)',
-                    }}
-                />
-            )}
+            {/* Title */}
+            <span
+                className="text-xs sm:text-sm font-medium text-slate-700 text-center line-clamp-2 leading-relaxed w-full px-1"
+                dangerouslySetInnerHTML={{ __html: app.name }}
+            />
         </button>
     );
 }
 
+// Category Colors Map - Cozy & Distinct Palette
+const CATEGORY_COLORS: Record<SubjectCategory, {
+    bg: string;
+    text: string;
+    border: string;
+    iconBg: string;
+    iconColor: string;
+    lightBg: string;
+}> = {
+    general: { // Warm Amber/Yellow
+        bg: "bg-amber-50",
+        text: "text-amber-800",
+        border: "border-amber-200",
+        iconBg: "bg-amber-100",
+        iconColor: "text-amber-600",
+        lightBg: "bg-amber-50/50"
+    },
+    thai: { // Cozy Coral/Pink
+        bg: "bg-rose-50",
+        text: "text-rose-800",
+        border: "border-rose-200",
+        iconBg: "bg-rose-100",
+        iconColor: "text-rose-600",
+        lightBg: "bg-rose-50/50"
+    },
+    math: { // Calm Blue
+        bg: "bg-blue-50",
+        text: "text-blue-800",
+        border: "border-blue-200",
+        iconBg: "bg-blue-100",
+        iconColor: "text-blue-600",
+        lightBg: "bg-blue-50/50"
+    },
+    science: { // Fresh Teal/Cyan
+        bg: "bg-cyan-50",
+        text: "text-cyan-800",
+        border: "border-cyan-200",
+        iconBg: "bg-cyan-100",
+        iconColor: "text-cyan-600",
+        lightBg: "bg-cyan-50/50"
+    },
+    social: { // Earthy Orange/Terracotta
+        bg: "bg-orange-50",
+        text: "text-orange-800",
+        border: "border-orange-200",
+        iconBg: "bg-orange-100",
+        iconColor: "text-orange-600",
+        lightBg: "bg-orange-50/50"
+    },
+    foreign: { // Wise Purple
+        bg: "bg-purple-50",
+        text: "text-purple-800",
+        border: "border-purple-200",
+        iconBg: "bg-purple-100",
+        iconColor: "text-purple-600",
+        lightBg: "bg-purple-50/50"
+    },
+    guidance: { // Gentle Green
+        bg: "bg-emerald-50",
+        text: "text-emerald-800",
+        border: "border-emerald-200",
+        iconBg: "bg-emerald-100",
+        iconColor: "text-emerald-600",
+        lightBg: "bg-emerald-50/50"
+    },
+    health: { // Soft Red
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-200",
+        iconBg: "bg-red-100",
+        iconColor: "text-red-600",
+        lightBg: "bg-red-50/50"
+    },
+    arts: { // Creative Indigo
+        bg: "bg-indigo-50",
+        text: "text-indigo-800",
+        border: "border-indigo-200",
+        iconBg: "bg-indigo-100",
+        iconColor: "text-indigo-600",
+        lightBg: "bg-indigo-50/50"
+    },
+    career: { // Professional Slate/Gray
+        bg: "bg-slate-50",
+        text: "text-slate-800",
+        border: "border-slate-200",
+        iconBg: "bg-slate-100",
+        iconColor: "text-slate-600",
+        lightBg: "bg-slate-50/50"
+    },
+};
+
+// CategorySection Component - หมวดหมู่กลุ่ม สาระ (Collapsible)
+function CategorySection({ category, apps }: { category: SubjectCategory; apps: AppData[] }) {
+    const [isOpen, setIsOpen] = useState(false); // Default collapsed
+    const IconComponent = CATEGORY_ICONS[category];
+    const categoryName = CATEGORY_NAMES[category];
+    const colors = CATEGORY_COLORS[category];
+
+    if (apps.length === 0) return null;
+
+    return (
+        <div className={`rounded-2xl border transition-all duration-300 hover:shadow-md overflow-hidden ${isOpen
+            ? `${colors.bg} ${colors.border} shadow-sm`
+            : `${colors.lightBg} ${colors.border}/60 hover:${colors.bg}`
+            }`}>
+            {/* Category Header (Clickable) */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between p-3 transition-colors cursor-pointer text-left focus:outline-none group"
+            >
+                <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 ${colors.iconBg} ${colors.border} ${colors.iconColor} ${isOpen ? "shadow-sm scale-100" : "opacity-80 group-hover:opacity-100 group-hover:scale-110"}`}>
+                        <IconComponent className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h3 className={`font-bold text-lg transition-colors ${colors.text}`}>
+                            {categoryName}
+                        </h3>
+                        {!isOpen && (
+                            <p className={`text-xs font-medium opacity-70 ${colors.text}`}>
+                                {apps.length} รายการ
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <div className={`p-2 rounded-full transition-all duration-300 ${colors.iconColor} ${isOpen
+                    ? "bg-white/40 rotate-180"
+                    : "bg-white/0 group-hover:bg-white/30"
+                    }`}>
+                    <ChevronDown className="w-5 h-5" />
+                </div>
+            </button>
+
+            {/* Apps Grid - Collapsible Content */}
+            {isOpen && (
+                <div className={`p-4 pt-2 border-t ${colors.border} animate-in slide-in-from-top-2 duration-200`}>
+                    <div className="flex flex-wrap justify-start gap-4 sm:gap-6">
+                        {apps.map((app, index) => (
+                            <div
+                                key={app.id}
+                                className="animate-fade-in-up opacity-0"
+                                style={{
+                                    animationDelay: `${index * 30}ms`,
+                                    animationFillMode: "forwards",
+                                }}
+                            >
+                                <EBookCard app={app} priority={index < 8} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// Zone Switcher Component - ตัวเลือกคลังครู/นักเรียน
+function ZoneSwitcher({ currentZone, onZoneChange }: { currentZone: Zone; onZoneChange: (zone: Zone) => void }) {
+    return (
+        /* Adjust mb-6 to change spacing between the switcher and the content below */
+        <div className="flex justify-center mb-0">
+            <div
+                className="inline-flex items-center gap-1 p-2 rounded-full"
+                style={{
+                    background: "rgba(255, 255, 255, 0.75)",
+                    backdropFilter: "blur(20px)",
+                    border: "1px solid rgba(255, 255, 255, 0.6)",
+                    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.9)",
+                }}
+            >
+                {/* Teacher Zone */}
+                <button
+                    onClick={() => onZoneChange("teacher")}
+                    className={`flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 ${currentZone === "teacher"
+                        ? "bg-white text-slate-700 shadow-lg"
+                        : "text-slate-500 hover:text-slate-700"
+                        }`}
+                    style={{
+                        boxShadow: currentZone === "teacher"
+                            ? "0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.9)"
+                            : "none",
+                    }}
+                >
+                    <span className="font-bold text-lg sm:text-xl">คลังครู</span>
+                    <ArrowDown className={`w-6 h-6 transition-colors ${currentZone === "teacher" ? "text-emerald-500" : ""}`} />
+                </button>
+
+                {/* Student Zone */}
+                <button
+                    onClick={() => onZoneChange("student")}
+                    className={`flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 ${currentZone === "student"
+                        ? "bg-emerald-500 text-white shadow-lg"
+                        : "text-slate-500 hover:text-slate-700"
+                        }`}
+                    style={{
+                        boxShadow: currentZone === "student"
+                            ? "0 6px 20px rgba(16, 185, 129, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3)"
+                            : "none",
+                    }}
+                >
+                    <ArrowUp className="w-6 h-6" />
+                    <span className="font-bold text-lg sm:text-xl">คลังนักเรียน</span>
+                </button>
+            </div>
+        </div>
+    );
+}
+
 export default function HomeContent() {
-    const [currentZone, setCurrentZone] = useState<Zone>("teacher");
+    const [currentZone, setCurrentZone] = useState<Zone>("student");
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [apps, setApps] = useState<AppData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSeeding, setIsSeeding] = useState(false);
     const [error, setError] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -202,7 +353,7 @@ export default function HomeContent() {
             setApps(fetchedApps.map(toAppData));
         } catch (err) {
             console.error("Failed to fetch apps:", err);
-            setError("ไม่สามารถโหลดข้อมูลแหล่งเรียนรู้ได้");
+            setError("ไม่สามารถโหลดข้อมูลสื่อการเรียนรู้ได้");
         } finally {
             setIsLoading(false);
         }
@@ -227,202 +378,134 @@ export default function HomeContent() {
         router.push("/admin/dashboard");
     };
 
-    // Filter apps based on current zone and search
+    // Handle data seeding
+    const handleSeed = async () => {
+        setIsSeeding(true);
+        try {
+            await initializeDatabase();
+            await fetchApps();
+        } catch (err) {
+            console.error("Seeding failed", err);
+            setError("ไม่สามารถติดตั้งข้อมูลตัวอย่างได้");
+        } finally {
+            setIsSeeding(false);
+        }
+    };
+
+    // Filter apps based on current zone
     const filteredApps = useMemo(() => {
-        let result = apps.filter(
+        return apps.filter(
             (app) => app.zone === currentZone || app.zone === "both"
         );
+    }, [apps, currentZone]);
 
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
-            result = result.filter(app =>
-                app.name.toLowerCase().includes(query)
-            );
-        }
+    // Group apps by category
+    const appsByCategory = useMemo(() => {
+        const grouped: Record<SubjectCategory, AppData[]> = {
+            general: [],
+            thai: [],
+            math: [],
+            science: [],
+            social: [],
+            foreign: [],
+            guidance: [],
+            health: [],
+            arts: [],
+            career: [],
+        };
 
-        return result;
-    }, [apps, currentZone, searchQuery]);
+        filteredApps.forEach((app) => {
+            if (app.category && grouped[app.category]) {
+                grouped[app.category].push(app);
+            } else {
+                // ถ้าไม่มี category ให้ใส่ใน science เป็น default
+                grouped.science.push(app);
+            }
+        });
 
-    // Count apps per zone
-    const teacherCount = apps.filter(a => a.zone === "teacher" || a.zone === "both").length;
-    const studentCount = apps.filter(a => a.zone === "student" || a.zone === "both").length;
+        return grouped;
+    }, [filteredApps]);
+
+    // Get categories that have apps in a 2-column layout pattern
+    const categoriesWithApps = useMemo(() => {
+        return CATEGORY_ORDER.filter((cat) => appsByCategory[cat].length > 0);
+    }, [appsByCategory]);
 
     return (
-        <main className="min-h-screen flex flex-col relative overflow-hidden">
-            {/* Decorative Background Bubbles */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <FloatingBubble size={120} position={{ top: '5%', left: '5%' }} color="violet" delay={0} />
-                <FloatingBubble size={80} position={{ top: '15%', right: '10%' }} color="emerald" delay={1} />
-                <FloatingBubble size={60} position={{ bottom: '30%', left: '8%' }} color="white" delay={2} />
-                <FloatingBubble size={100} position={{ bottom: '10%', right: '5%' }} color="violet" delay={0.5} />
-                <FloatingBubble size={50} position={{ top: '40%', right: '3%' }} color="emerald" delay={1.5} />
-                <FloatingBubble size={70} position={{ bottom: '20%', left: '15%' }} color="white" delay={2.5} />
-            </div>
-
-            {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-50 px-4 py-3">
-                <div
-                    className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-4 py-3 rounded-2xl"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.6)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.5)',
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.8)',
-                    }}
-                >
-                    {/* Logo */}
-                    <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Image
-                                src="/logo.png"
-                                alt="Hongson e-Learning"
-                                width={44}
-                                height={44}
-                                className="w-10 h-10 sm:w-11 sm:h-11 object-contain rounded-xl"
-                                priority
-                            />
-                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white shadow-sm" />
-                        </div>
-                        <span className="hidden sm:block text-lg font-bold text-slate-700">
-                            Hongson <span className="text-violet-600">e-Learning</span>
-                        </span>
-                    </div>
-
-                    {/* Search Bar */}
-                    <div className="flex-1 max-w-md mx-4">
-                        <div
-                            className="relative"
-                        >
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                            <input
-                                type="text"
-                                placeholder="ค้นหาความรู้..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-2.5 rounded-xl bg-white/60 backdrop-blur-sm border border-white/60 focus:border-violet-300 focus:ring-2 focus:ring-violet-100 outline-none text-slate-700 placeholder:text-slate-400 transition-all"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={fetchApps}
-                            className="p-2.5 rounded-xl bg-white/50 hover:bg-white/70 border border-white/50 transition-all"
-                            title="รีเฟรช"
-                        >
-                            <RefreshCw className={`w-5 h-5 text-slate-600 ${isLoading ? "animate-spin" : ""}`} />
-                        </button>
-                    </div>
-                </div>
+        <main
+            className="min-h-screen flex flex-col relative"
+            style={{
+                backgroundImage: "url('/bg-hongson.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundAttachment: "fixed",
+            }}
+        >
+            {/* Header with Zone Switcher */}
+            <header className="sticky top-0 z-50 py-4 px-4">
+                <ZoneSwitcher
+                    currentZone={currentZone}
+                    onZoneChange={setCurrentZone}
+                />
             </header>
 
-            {/* Hero Section */}
-            <section className="relative z-10 text-center py-8 sm:py-12 px-4">
-                <div className="max-w-3xl mx-auto">
-                    {/* Badge */}
+            {/* Main Content */}
+            <section className="flex-1 px-4 pb-8">
+                <div className="max-w-5xl mx-auto">
+                    {/* Main Content Card */}
                     <div
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
+                        className="rounded-3xl p-5 sm:p-8"
                         style={{
-                            background: 'rgba(255, 255, 255, 0.5)',
-                            backdropFilter: 'blur(12px)',
-                            border: '1px solid rgba(255, 255, 255, 0.5)',
+                            background: "rgba(255, 255, 255, 0.5)",
+                            backdropFilter: "blur(24px)",
+                            border: "1px solid rgba(255, 255, 255, 0.6)",
+                            boxShadow: "0 8px 40px rgba(0, 0, 0, 0.06), inset 0 2px 4px rgba(255, 255, 255, 0.9)",
                         }}
                     >
-                        <Library className="w-4 h-4 text-violet-600" />
-                        <span className="text-sm font-medium text-slate-600">แหล่งรวมทรัพยากรการเรียนรู้เพื่ออนาคตที่ไร้ขีดจำกัด</span>
-                        <Sparkles className="w-4 h-4 text-emerald-500" />
-                    </div>
-
-                    {/* Title */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 mb-3">
-                        คลังความรู้<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-emerald-500">ดิจิทัล</span>
-                    </h1>
-
-                    {/* Subtitle */}
-                    <p className="text-slate-500 text-base sm:text-lg max-w-xl mx-auto">
-                        เข้าถึงสื่อการเรียนรู้ E-Book และทรัพยากรดิจิทัลครบครัน
-                        <br className="hidden sm:block" />
-                        สำหรับครูและนักเรียนโรงเรียนบ้านหงษ์ทอง
-                    </p>
-                </div>
-            </section>
-
-            {/* Zone Selector Cards */}
-            <section className="relative z-10 px-4 pb-6">
-                <div className="max-w-2xl mx-auto flex gap-4">
-                    <ZoneCard
-                        zone="teacher"
-                        isActive={currentZone === "teacher"}
-                        onClick={() => setCurrentZone("teacher")}
-                        count={teacherCount}
-                    />
-                    <ZoneCard
-                        zone="student"
-                        isActive={currentZone === "student"}
-                        onClick={() => setCurrentZone("student")}
-                        count={studentCount}
-                    />
-                </div>
-            </section>
-
-            {/* Resources Section */}
-            <section className="relative z-10 flex-1 px-4 pb-8">
-                <div className="max-w-6xl mx-auto">
-                    {/* Section Header */}
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <div
-                                className={`w-10 h-10 rounded-xl flex items-center justify-center ${currentZone === "teacher" ? "bg-violet-100" : "bg-emerald-100"
-                                    }`}
-                            >
-                                <BookMarked className={`w-5 h-5 ${currentZone === "teacher" ? "text-violet-600" : "text-emerald-600"
-                                    }`} />
+                        {/* Section Title */}
+                        <div className="flex items-center justify-center gap-3 mb-6">
+                            <div className="w-16 h-16 relative flex items-center justify-center filter drop-shadow-md">
+                                <Image
+                                    src="/logo-main.png"
+                                    alt="E-Learning Logo"
+                                    fill
+                                    className="object-contain"
+                                />
                             </div>
-                            <div>
-                                <h2 className="text-lg sm:text-xl font-bold text-slate-700">
-                                    สื่อการเรียนรู้และ E-Book
-                                </h2>
-                                <p className="text-sm text-slate-500">
-                                    {currentZone === "teacher" ? "สำหรับคุณครู" : "สำหรับนักเรียน"}
-                                </p>
+                            <div className="flex flex-col items-center">
+                                <div className="inline-flex flex-col items-center justify-center px-8 py-3 rounded-2xl bg-gradient-to-r from-slate-100 via-white to-slate-100 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-xl relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-purple-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                    <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent text-center relative z-10">
+                                        คลังสื่อการเรียนรู้ออนไลน์
+                                    </h2>
+                                    <span className="text-sm sm:text-base font-medium text-slate-500 mt-1 relative z-10 tracking-wide">
+                                        (HONGSON e-Learning)
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        {searchQuery && (
-                            <span className="text-sm text-slate-500">
-                                ผลการค้นหา: {filteredApps.length} รายการ
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Content Card */}
-                    <div
-                        className="rounded-3xl p-4 sm:p-6 md:p-8"
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.5)',
-                            backdropFilter: 'blur(20px)',
-                            border: '1px solid rgba(255, 255, 255, 0.5)',
-                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8)',
-                        }}
-                    >
-                        {isLoading ? (
+                        {/* Loading State */}
+                        {isLoading && (
                             <div className="flex flex-col items-center justify-center py-16">
                                 <div className="relative">
                                     <div
                                         className="w-16 h-16 rounded-2xl flex items-center justify-center"
                                         style={{
-                                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(16, 185, 129, 0.2))',
-                                            border: '1px solid rgba(255, 255, 255, 0.5)',
+                                            background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))",
+                                            border: "1px solid rgba(255, 255, 255, 0.5)",
                                         }}
                                     >
-                                        <Loader2 className="w-8 h-8 text-violet-500 animate-spin" />
+                                        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
                                     </div>
-                                    <div className="absolute inset-0 rounded-2xl bg-violet-400 blur-2xl opacity-20" />
+                                    <div className="absolute inset-0 rounded-2xl bg-emerald-400 blur-2xl opacity-20" />
                                 </div>
-                                <p className="text-slate-500 mt-4 font-medium">กำลังโหลดแหล่งเรียนรู้...</p>
+                                <p className="text-slate-500 mt-4 font-medium">กำลังโหลดสื่อการเรียนรู้...</p>
                             </div>
-                        ) : error ? (
+                        )}
+
+                        {/* Error State */}
+                        {!isLoading && error && (
                             <div className="flex flex-col items-center justify-center py-16">
                                 <div className="w-16 h-16 rounded-2xl bg-rose-100 flex items-center justify-center mb-4">
                                     <BookOpen className="w-8 h-8 text-rose-400" />
@@ -430,20 +513,50 @@ export default function HomeContent() {
                                 <p className="text-rose-600 mb-4 font-medium">{error}</p>
                                 <button
                                     onClick={fetchApps}
-                                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-emerald-500 text-white font-medium hover:shadow-lg transition-all"
+                                    className="px-6 py-3 rounded-xl bg-emerald-500 text-white font-medium hover:bg-emerald-600 hover:shadow-lg transition-all"
                                 >
                                     ลองใหม่อีกครั้ง
                                 </button>
                             </div>
-                        ) : (
-                            <AppGrid
-                                apps={filteredApps}
-                                emptyMessage={
-                                    searchQuery
-                                        ? `ไม่พบผลลัพธ์สำหรับ "${searchQuery}"`
-                                        : `ยังไม่มีแหล่งเรียนรู้สำหรับ${currentZone === "student" ? "นักเรียน" : "ครู"}`
-                                }
-                            />
+                        )}
+
+                        {/* Content Grid - Single Column Layout */}
+                        {!isLoading && !error && (
+                            <div className="flex flex-col gap-3">
+                                {categoriesWithApps.map((category) => (
+                                    <CategorySection
+                                        key={category}
+                                        category={category}
+                                        apps={appsByCategory[category]}
+                                    />
+                                ))}
+
+                                {/* Empty State */}
+                                {categoriesWithApps.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center py-16">
+                                        <div className="w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100">
+                                            <BookOpen className="w-10 h-10 text-emerald-300" />
+                                        </div>
+                                        <p className="text-slate-500 text-center mb-2">
+                                            ยังไม่มีสื่อการเรียนรู้สำหรับ{currentZone === "student" ? "นักเรียน" : "ครู"}
+                                        </p>
+
+                                        {/* Seed Button for Demo */}
+                                        <button
+                                            onClick={handleSeed}
+                                            disabled={isSeeding}
+                                            className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-100/50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50"
+                                        >
+                                            {isSeeding ? (
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                            ) : (
+                                                <Database className="w-4 h-4" />
+                                            )}
+                                            {isSeeding ? "กำลังติดตั้ง..." : "ติดตั้งข้อมูลตัวอย่าง"}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -451,7 +564,7 @@ export default function HomeContent() {
 
             {/* Footer */}
             <footer className="relative z-10 py-6 px-4">
-                <div className="max-w-6xl mx-auto flex items-center justify-center">
+                <div className="max-w-5xl mx-auto flex items-center justify-center">
                     <div className="developer-badge">
                         <div className="developer-badge-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -468,8 +581,8 @@ export default function HomeContent() {
                         </div>
                         <button
                             onClick={() => setIsLoginModalOpen(true)}
-                            className="ml-2 p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/20 transition-all"
-                            title="Admin Access"
+                            className="ml-2 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-black/5 transition-all"
+                            title="เข้าสู่ระบบผู้ดูแล"
                         >
                             <Lock className="w-3.5 h-3.5" />
                         </button>

@@ -18,7 +18,7 @@ import {
     BookMarked,
 } from "lucide-react";
 import { uploadImage } from "@/lib/storage";
-import { AppDocument } from "@/lib/firestore";
+import { AppDocument, SubjectCategory, CATEGORY_NAMES } from "@/lib/firestore";
 import AppCard from "./AppCard";
 
 type Zone = "student" | "teacher" | "both";
@@ -52,6 +52,7 @@ export default function AppFormModal({
     const [name, setName] = useState("");
     const [url, setUrl] = useState("");
     const [zone, setZone] = useState<Zone>("both");
+    const [category, setCategory] = useState<SubjectCategory>("science");
     const [iconUrl, setIconUrl] = useState("");
     const [color, setColor] = useState(GRADIENT_OPTIONS[0].value);
     const [isUploading, setIsUploading] = useState(false);
@@ -66,6 +67,7 @@ export default function AppFormModal({
             setName(editingApp.name);
             setUrl(editingApp.url);
             setZone(editingApp.zone);
+            setCategory(editingApp.category || "science");
             setIconUrl(editingApp.iconUrl);
             setColor(editingApp.color || GRADIENT_OPTIONS[0].value);
         } else {
@@ -73,6 +75,7 @@ export default function AppFormModal({
             setName("");
             setUrl("");
             setZone("both");
+            setCategory("science");
             setIconUrl("");
             setColor(GRADIENT_OPTIONS[0].value);
         }
@@ -162,6 +165,7 @@ export default function AppFormModal({
                 name: name.trim(),
                 url: url.trim(),
                 zone,
+                category,
                 iconUrl: iconUrl.trim(),
                 color,
             });
@@ -335,6 +339,31 @@ export default function AppFormModal({
                                         <Globe className="w-5 h-5" />
                                         <span className="text-xs font-medium">ทั้งหมด</span>
                                     </button>
+                                </div>
+                            </div>
+
+                            {/* Category Selection */}
+                            <div>
+                                <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-3">
+                                    <BookOpen className="w-4 h-4 opacity-60" />
+                                    หมวดหมู่กลุ่มสาระ
+                                </label>
+                                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                                    {(Object.keys(CATEGORY_NAMES) as SubjectCategory[]).map((cat) => (
+                                        <button
+                                            key={cat}
+                                            type="button"
+                                            onClick={() => setCategory(cat)}
+                                            disabled={isSubmitting}
+                                            className={`p-2.5 rounded-lg border transition-all flex items-center gap-2 text-left ${category === cat
+                                                ? "border-emerald-500 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500"
+                                                : "border-slate-200 hover:border-slate-300 text-slate-600 hover:bg-slate-50"
+                                                }`}
+                                        >
+                                            <div className={`w-2 h-2 rounded-full flex-shrink-0 ${category === cat ? "bg-emerald-500" : "bg-slate-300"}`} />
+                                            <span className="text-sm truncate">{CATEGORY_NAMES[cat]}</span>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
 

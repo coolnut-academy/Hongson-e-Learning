@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink, Ban, BookOpen } from "lucide-react";
+import { ExternalLink, Ban, BookOpen, Download } from "lucide-react";
+import { SubjectCategory } from "@/lib/firestore";
 
 export interface AppData {
     id: string;
@@ -9,6 +10,7 @@ export interface AppData {
     url: string;
     iconUrl: string;
     zone: "student" | "teacher" | "both";
+    category?: SubjectCategory;
     color?: string;
     isEnabled?: boolean;
 }

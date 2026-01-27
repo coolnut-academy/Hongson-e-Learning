@@ -17,8 +17,63 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
-// Collection name for apps
-const APPS_COLLECTION = "apps";
+// Collection name for apps - CHANGED to reset database
+const APPS_COLLECTION = "learning_resources";
+
+// กลุ่มสาระการเรียนรู้ 9 กลุ่ม ตามหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน + ความรู้ทั่วไป
+export type SubjectCategory =
+    | "general"        // ความรู้ทั่วไป
+    | "thai"           // ภาษาไทย
+    | "math"           // คณิตศาสตร์
+    | "science"        // วิทยาศาสตร์และเทคโนโลยี
+    | "social"         // สังคมศึกษา ศาสนาและวัฒนธรรม
+    | "foreign"        // ภาษาต่างประเทศ
+    | "guidance"       // แนะแนว
+    | "health"         // สุขศึกษาและพลศึกษา
+    | "arts"           // ศิลปะ
+    | "career";        // การงานอาชีพ
+
+// Initial Seed Data
+export const INITIAL_DATA: Array<Omit<AppDocument, "id" | "createdAt" | "updatedAt">> = [
+    { name: "ความรู้รอบตัวน่ารู้", category: "general", zone: "student", url: "#", iconUrl: "", color: "from-fuchsia-500 to-purple-600", order: 0, isEnabled: true },
+    { name: "ภาษาไทยพื้นฐาน", category: "thai", zone: "student", url: "#", iconUrl: "", color: "from-green-500 to-emerald-600", order: 1, isEnabled: true },
+    { name: "คณิตศาสตร์ ม.ต้น", category: "math", zone: "student", url: "#", iconUrl: "", color: "from-blue-500 to-cyan-600", order: 2, isEnabled: true },
+    { name: "วิทยาศาสตร์ทั่วไป", category: "science", zone: "student", url: "#", iconUrl: "", color: "from-teal-500 to-cyan-600", order: 3, isEnabled: true },
+    { name: "สังคมศึกษาฯ", category: "social", zone: "student", url: "#", iconUrl: "", color: "from-orange-500 to-amber-600", order: 4, isEnabled: true },
+    { name: "English for Communication", category: "foreign", zone: "student", url: "#", iconUrl: "", color: "from-purple-500 to-violet-600", order: 5, isEnabled: true },
+    { name: "แนะแนวอาชีพ", category: "guidance", zone: "student", url: "#", iconUrl: "", color: "from-pink-500 to-rose-600", order: 6, isEnabled: true },
+    { name: "สุขศึกษาและพลศึกษา", category: "health", zone: "student", url: "#", iconUrl: "", color: "from-green-600 to-emerald-700", order: 7, isEnabled: true },
+    { name: "ศิลปะและการออกแบบ", category: "arts", zone: "student", url: "#", iconUrl: "", color: "from-yellow-500 to-amber-500", order: 8, isEnabled: true },
+    { name: "การงานอาชีพ", category: "career", zone: "student", url: "#", iconUrl: "", color: "from-brown-500 to-orange-900", order: 9, isEnabled: true },
+];
+
+// ชื่อภาษาไทยของแต่ละกลุ่มสาระ
+export const CATEGORY_NAMES: Record<SubjectCategory, string> = {
+    general: "ความรู้ทั่วไป",
+    thai: "ภาษาไทย",
+    math: "คณิตศาสตร์",
+    science: "วิทยาศาสตร์และเทคโนโลยี",
+    social: "สังคมศึกษา ศาสนาและวัฒนธรรม",
+    foreign: "ภาษาต่างประเทศ",
+    guidance: "แนะแนว",
+    health: "สุขศึกษาและพลศึกษา",
+    arts: "ศิลปะ",
+    career: "การงานอาชีพ",
+};
+
+// สีของแต่ละกลุ่มสาระ (สีเขียวโทนต่างๆ)
+export const CATEGORY_COLORS: Record<SubjectCategory, { bg: string; text: string; icon: string }> = {
+    general: { bg: "#f3e5f5", text: "#6a1b9a", icon: "#8e24aa" },
+    thai: { bg: "#e8f5e9", text: "#2e7d32", icon: "#43a047" },
+    math: { bg: "#e3f2fd", text: "#1565c0", icon: "#1e88e5" },
+    science: { bg: "#e0f7fa", text: "#00838f", icon: "#00acc1" },
+    social: { bg: "#fff3e0", text: "#ef6c00", icon: "#fb8c00" },
+    foreign: { bg: "#f3e5f5", text: "#7b1fa2", icon: "#9c27b0" },
+    guidance: { bg: "#fce4ec", text: "#c2185b", icon: "#e91e63" },
+    health: { bg: "#e8f5e9", text: "#388e3c", icon: "#4caf50" },
+    arts: { bg: "#fff8e1", text: "#f9a825", icon: "#fbc02d" },
+    career: { bg: "#efebe9", text: "#5d4037", icon: "#795548" },
+};
 
 // App data interface matching the existing AppData type
 export interface AppDocument {
@@ -27,6 +82,7 @@ export interface AppDocument {
     url: string;
     iconUrl: string;
     zone: "student" | "teacher" | "both";
+    category?: SubjectCategory; // กลุ่มสาระการเรียนรู้
     color?: string;
     order: number;
     isEnabled?: boolean; // Default is true (enabled)
@@ -205,5 +261,27 @@ export async function normalizeAppOrders(): Promise<void> {
         console.log("App orders normalized");
     } catch (error) {
         console.error("Error normalizing orders:", error);
+    }
+}
+
+/**
+ * Initialize database with default 9 category items if empty
+ */
+export async function initializeDatabase(): Promise<void> {
+    try {
+        const apps = await getApps();
+        if (apps.length > 0) {
+            console.log("Database already has data, skipping initialization");
+            return;
+        }
+
+        console.log("Initializing database with default data...");
+        for (const item of INITIAL_DATA) {
+            await addApp(item);
+        }
+        console.log("Database initialization complete!");
+    } catch (error) {
+        console.error("Failed to initialize database:", error);
+        throw error;
     }
 }

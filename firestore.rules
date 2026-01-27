@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ตั้งค่าความปลอดภัยสำหรับ Learning Resources (E-Books)
+    match /learning_resources/{resourceId} {
+      // 1. การอ่าน (Read): เปิดสาธารณะ (Public)
+      // เพื่อให้นักเรียนและครูทุกคนเข้าถึงสื่อการเรียนรู้ได้โดยไม่ต้อง Login Firebase
+      allow read: if true;
+
+      // 2. การเขียน (Write): เปิดสาธารณะ (Warning!)
+      // เนื่องจากระบบ Login ของ App เป็นแบบ Custom (ใช้ Secret Key) แต่การเขียน Database ทำผ่าน Client SDK
+      // ทำให้ Firestore Rules ไม่สามารถตรวจสอบสถานะ Admin จาก Cookie ได้
+      // จึงจำเป็นต้องเปิด Write permission ไว้
+      // 
+      // คำแนะนำเพื่อความปลอดภัยในอนาคต: 
+      // ควรเปลี่ยนไปใช้ Firebase Admin SDK ผ่าน Next.js API Routes เพื่อตรวจสอบสิทธิ์ Admin อย่างเคร่งครัด
+      allow write: if true;
+    }
+
+    // Default Rule: ปิดการเข้าถึง Collection อื่นๆ ทั้งหมดที่ไม่ได้ระบุไว้
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
