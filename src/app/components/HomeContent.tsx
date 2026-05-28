@@ -69,6 +69,11 @@ function toAppData(doc: AppDocument): AppData {
 // E-Book Card Component - สื่อการเรียนรู้แต่ละรายการ
 function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean }) {
     const isEnabled = app.isEnabled !== false;
+    const category = app.category || 'links';
+    
+    // Default to links if category is not in CATEGORY_COLORS for some reason
+    const colors = CATEGORY_COLORS[category] || CATEGORY_COLORS.links;
+    const DefaultIcon = category === 'links' ? Globe : BookOpen;
 
     const handleClick = () => {
         if (!isEnabled) {
@@ -81,19 +86,14 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
     return (
         <button
             onClick={handleClick}
-            className={`group flex flex-col items-center p-1 sm:p-5 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-98 min-w-200px] ${isEnabled
-                ? "bg-white/70 hover:bg-white/90 hover:shadow-xl cursor-pointer"
-                : "bg-gray-100/50 cursor-not-allowed opacity-60"
+            className={`group flex flex-col items-center p-3 sm:p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 active:translate-y-0 w-[140px] sm:w-[180px] ${isEnabled
+                ? "bg-white cursor-pointer shadow-[0_4px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.15),0_8px_10px_-6px_rgba(0,0,0,0.1)] border border-slate-200 hover:border-slate-300"
+                : "bg-gray-50 cursor-not-allowed opacity-60 border border-slate-200"
                 }`}
-            style={{
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(255, 255, 255, 0.7)",
-                boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.9)",
-            }}
             disabled={!isEnabled}
         >
-            {/* Image/Icon Container - Adjusted for Full Cover Look */}
-            <div className="w-full aspect-[1/1] mb-3 rounded-xl relative overflow-hidden bg-emerald-50/50 border border-emerald-100/50 transition-all duration-300 group-hover:shadow-md">
+            {/* Image/Icon Container */}
+            <div className={`w-full aspect-[1/1] mb-3 rounded-xl relative overflow-hidden ${colors.iconBg} border ${colors.border} transition-all duration-300 group-hover:shadow-sm`}>
                 {app.iconUrl && (app.iconUrl.startsWith("http") || app.iconUrl.startsWith("/") || app.iconUrl.startsWith("data:")) ? (
                     <Image
                         src={app.iconUrl}
@@ -101,18 +101,18 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                         priority={priority}
-                        sizes="(max-width: 768px) 50vw, 20vw"
+                        sizes="(max-width: 768px) 140px, 180px"
                     />
                 ) : (
                     <div className="flex items-center justify-center w-full h-full">
-                        <BookOpen className="w-8 h-8 sm:w-8 sm:h-8 text-emerald-300/50" />
+                        <DefaultIcon className={`w-12 h-12 sm:w-14 sm:h-14 ${colors.iconColor} drop-shadow-sm transition-transform duration-300 group-hover:scale-110`} />
                     </div>
                 )}
             </div>
 
             {/* Title */}
             <span
-                className="text-xs sm:text-sm font-medium text-slate-700 text-center line-clamp-2 leading-relaxed w-full px-1"
+                className="text-xs sm:text-sm font-semibold text-slate-700 text-center line-clamp-2 leading-relaxed w-full px-1 group-hover:text-slate-900"
                 dangerouslySetInnerHTML={{ __html: app.name }}
             />
         </button>
