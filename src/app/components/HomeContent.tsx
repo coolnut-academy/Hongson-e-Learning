@@ -128,23 +128,7 @@ const CATEGORY_COLORS: Record<SubjectCategory, {
     iconColor: string;
     lightBg: string;
 }> = {
-    general: { // Warm Amber/Yellow
-        bg: "bg-amber-50",
-        text: "text-amber-800",
-        border: "border-amber-200",
-        iconBg: "bg-amber-100",
-        iconColor: "text-amber-600",
-        lightBg: "bg-amber-50/50"
-    },
-    thai: { // Cozy Coral/Pink
-        bg: "bg-rose-50",
-        text: "text-rose-800",
-        border: "border-rose-200",
-        iconBg: "bg-rose-100",
-        iconColor: "text-rose-600",
-        lightBg: "bg-rose-50/50"
-    },
-    math: { // Calm Blue
+    docs: { // Blue Theme
         bg: "bg-blue-50",
         text: "text-blue-800",
         border: "border-blue-200",
@@ -152,61 +136,13 @@ const CATEGORY_COLORS: Record<SubjectCategory, {
         iconColor: "text-blue-600",
         lightBg: "bg-blue-50/50"
     },
-    science: { // Fresh Teal/Cyan
-        bg: "bg-cyan-50",
-        text: "text-cyan-800",
-        border: "border-cyan-200",
-        iconBg: "bg-cyan-100",
-        iconColor: "text-cyan-600",
-        lightBg: "bg-cyan-50/50"
-    },
-    social: { // Earthy Orange/Terracotta
-        bg: "bg-orange-50",
-        text: "text-orange-800",
-        border: "border-orange-200",
-        iconBg: "bg-orange-100",
-        iconColor: "text-orange-600",
-        lightBg: "bg-orange-50/50"
-    },
-    foreign: { // Wise Purple
-        bg: "bg-purple-50",
-        text: "text-purple-800",
-        border: "border-purple-200",
-        iconBg: "bg-purple-100",
-        iconColor: "text-purple-600",
-        lightBg: "bg-purple-50/50"
-    },
-    guidance: { // Gentle Green
+    links: { // Emerald/Teal Theme
         bg: "bg-emerald-50",
         text: "text-emerald-800",
         border: "border-emerald-200",
         iconBg: "bg-emerald-100",
         iconColor: "text-emerald-600",
         lightBg: "bg-emerald-50/50"
-    },
-    health: { // Soft Red
-        bg: "bg-red-50",
-        text: "text-red-800",
-        border: "border-red-200",
-        iconBg: "bg-red-100",
-        iconColor: "text-red-600",
-        lightBg: "bg-red-50/50"
-    },
-    arts: { // Creative Indigo
-        bg: "bg-indigo-50",
-        text: "text-indigo-800",
-        border: "border-indigo-200",
-        iconBg: "bg-indigo-100",
-        iconColor: "text-indigo-600",
-        lightBg: "bg-indigo-50/50"
-    },
-    career: { // Professional Slate/Gray
-        bg: "bg-slate-50",
-        text: "text-slate-800",
-        border: "border-slate-200",
-        iconBg: "bg-slate-100",
-        iconColor: "text-slate-600",
-        lightBg: "bg-slate-50/50"
     },
 };
 
