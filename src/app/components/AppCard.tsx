@@ -26,7 +26,7 @@ export default function AppCard({ app, priority = false }: AppCardProps) {
 
     const handleClick = () => {
         if (!isEnabled) {
-            alert("แหล่งเรียนรู้นี้ยังไม่เปิดให้บริการ");
+            alert("ข้อมูลสารสนเทศนี้ยังไม่เปิดให้บริการ");
             return;
         }
         window.open(app.url, "_blank", "noopener,noreferrer");

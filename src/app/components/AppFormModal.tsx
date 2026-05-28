@@ -143,12 +143,12 @@ export default function AppFormModal({
 
         // Validation
         if (!name.trim()) {
-            setError("กรุณาใส่ชื่อแหล่งเรียนรู้");
+            setError("กรุณาใส่ชื่อข้อมูลสารสนเทศ");
             return;
         }
 
         if (!url.trim()) {
-            setError("กรุณาใส่ URL ของแหล่งเรียนรู้");
+            setError("กรุณาใส่ URL ของข้อมูลสารสนเทศ");
             return;
         }
 
@@ -234,10 +234,10 @@ export default function AppFormModal({
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold text-slate-800">
-                                    {isEditing ? "แก้ไขแหล่งเรียนรู้" : "เพิ่มแหล่งเรียนรู้ใหม่"}
+                                    {isEditing ? "แก้ไขข้อมูลสารสนเทศ" : "เพิ่มข้อมูลสารสนเทศใหม่"}
                                 </h2>
                                 <p className="text-sm text-slate-500">
-                                    {isEditing ? "อัปเดตข้อมูลแหล่งเรียนรู้หรือ E-Book" : "กรอกข้อมูล E-Book หรือแหล่งเรียนรู้ที่ต้องการเพิ่ม"}
+                                    {isEditing ? "อัปเดตข้อมูลหรือเว็บไซต์" : "กรอกข้อมูลสารสนเทศหรือเว็บไซต์ที่ต้องการเพิ่ม"}
                                 </p>
                             </div>
                         </div>
@@ -249,7 +249,7 @@ export default function AppFormModal({
                                 <AppCard
                                     app={{
                                         id: "preview",
-                                        name: name || "ชื่อแหล่งเรียนรู้",
+                                        name: name || "ชื่อข้อมูลสารสนเทศ",
                                         url: url || "#",
                                         iconUrl: previewFile || iconUrl || "",
                                         zone: zone,
@@ -266,7 +266,7 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
                                     <Type className="w-4 h-4 opacity-60" />
-                                    ชื่อแหล่งเรียนรู้ (รองรับ HTML เช่น &lt;br&gt; เพื่อขึ้นบรรทัดใหม่)
+                                    ชื่อข้อมูลสารสนเทศ (รองรับ HTML เช่น &lt;br&gt; เพื่อขึ้นบรรทัดใหม่)
                                 </label>
                                 <input
                                     type="text"
@@ -282,7 +282,7 @@ export default function AppFormModal({
                             <div>
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-2">
                                     <LinkIcon className="w-4 h-4 opacity-60" />
-                                    URL (ลิงก์ไปยังแหล่งเรียนรู้)
+                                    URL (ลิงก์ไปยังข้อมูลสารสนเทศ)
                                 </label>
                                 <input
                                     type="url"
@@ -499,7 +499,7 @@ export default function AppFormModal({
                                     ) : (
                                         <>
                                             <Save className="w-5 h-5" />
-                                            <span>{isEditing ? "บันทึกการแก้ไข" : "เพิ่มแหล่งเรียนรู้"}</span>
+                                            <span>{isEditing ? "บันทึกการแก้ไข" : "เพิ่มข้อมูลสารสนเทศ"}</span>
                                         </>
                                     )}
                                 </span>

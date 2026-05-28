@@ -160,8 +160,8 @@ export default function AdminDashboard() {
             setApps(fetchedApps);
             setError("");
         } catch (err) {
-            console.error("Failed to fetch apps:", err);
-            setError("ไม่สามารถโหลดข้อมูลแหล่งเรียนรู้ได้");
+            console.error(err);
+            setError("ไม่สามารถโหลดข้อมูลสารสนเทศได้");
         }
     }, []);
 
@@ -229,8 +229,8 @@ export default function AdminDashboard() {
             await fetchApps();
             setDeleteConfirm(null);
         } catch (err) {
-            console.error("Delete failed:", err);
-            setError("ลบแหล่งเรียนรู้ไม่สำเร็จ");
+            console.error(err);
+            setError("ลบข้อมูลสารสนเทศไม่สำเร็จ");
         } finally {
             setIsDeleting(false);
         }
@@ -269,8 +269,8 @@ export default function AdminDashboard() {
             await updateApp(app.id!, { isEnabled: newEnabledState });
             await fetchApps();
         } catch (err) {
-            console.error("Toggle enabled failed:", err);
-            setError("เปลี่ยนสถานะแหล่งเรียนรู้ไม่สำเร็จ");
+            console.error(err);
+            setError("เปลี่ยนสถานะข้อมูลสารสนเทศไม่สำเร็จ");
         } finally {
             setIsToggling(null);
         }
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <h1 className="text-lg font-bold text-gradient">
-                                    ศูนย์จัดการคลังความรู้
+                                    ศูนย์จัดการคลังสารสนเทศ
                                 </h1>
                                 <p className="text-xs text-slate-500">HONGSON สารสนเทศ</p>
                             </div>
@@ -345,10 +345,10 @@ export default function AdminDashboard() {
                     <div>
                         <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                             <Library className="w-7 h-7 text-violet-600" />
-                            จัดการแหล่งเรียนรู้
+                            จัดการข้อมูลสารสนเทศ
                         </h2>
                         <p className="text-slate-500 mt-1">
-                            เพิ่ม แก้ไข ลบ หรือเรียงลำดับแหล่งเรียนรู้และ E-Book ที่แสดงในคลังความรู้
+                            เพิ่ม แก้ไข ลบ หรือเรียงลำดับข้อมูลสารสนเทศที่แสดงในระบบ
                         </p>
                     </div>
 
@@ -362,7 +362,7 @@ export default function AdminDashboard() {
                         }}
                     >
                         <Plus className="w-5 h-5" />
-                        เพิ่มแหล่งเรียนรู้ใหม่
+                        เพิ่มข้อมูลสารสนเทศใหม่
                     </button>
                 </div>
 
@@ -383,17 +383,17 @@ export default function AdminDashboard() {
                                 <BookOpen className="w-10 h-10 text-slate-400" />
                             </div>
                             <h3 className="text-lg font-semibold text-slate-700 mb-2">
-                                ยังไม่มีแหล่งเรียนรู้
+                                ยังไม่มีข้อมูลสารสนเทศ
                             </h3>
                             <p className="text-slate-500 mb-6">
-                                เริ่มต้นด้วยการเพิ่มแหล่งเรียนรู้หรือ E-Book แรกของคุณ
+                                เริ่มต้นด้วยการเพิ่มข้อมูลสารสนเทศแรกของคุณ
                             </p>
                             <button
                                 onClick={openAddModal}
                                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-100 text-violet-700 font-medium hover:bg-violet-200 transition-all"
                             >
                                 <Plus className="w-5 h-5" />
-                                เพิ่มแหล่งเรียนรู้ใหม่
+                                เพิ่มข้อมูลสารสนเทศใหม่
                             </button>
                         </div>
                     ) : (
@@ -402,7 +402,7 @@ export default function AdminDashboard() {
                             {/* Table Header (Desktop) */}
                             <div className="hidden md:grid md:grid-cols-14 gap-4 px-6 py-3 bg-slate-50/50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 <div className="col-span-1 text-center">#</div>
-                                <div className="col-span-4">แหล่งเรียนรู้</div>
+                                <div className="col-span-4">ข้อมูลสารสนเทศ</div>
                                 <div className="col-span-2">คลังความรู้</div>
                                 <div className="col-span-2 text-center">สถานะ</div>
                                 <div className="col-span-2 text-center">เรียงลำดับ</div>

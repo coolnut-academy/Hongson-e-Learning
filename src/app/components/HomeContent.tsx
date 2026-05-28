@@ -440,7 +440,7 @@ export default function HomeContent() {
                                 <div className="inline-flex flex-col items-center justify-center px-8 py-3 rounded-2xl bg-gradient-to-r from-slate-100 via-white to-slate-100 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-xl relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-purple-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                                     <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent text-center relative z-10">
-                                        คลังสื่อการเรียนรู้ออนไลน์
+                                        คลังสารสนเทศออนไลน์
                                     </h2>
                                     <span className="text-sm sm:text-base font-medium text-slate-500 mt-1 relative z-10 tracking-wide">
                                         (HONGSON สารสนเทศ)

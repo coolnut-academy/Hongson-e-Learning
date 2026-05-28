@@ -11,7 +11,7 @@ interface AppGridProps {
 
 export default function AppGrid({
     apps,
-    emptyMessage = "ไม่พบแหล่งเรียนรู้",
+    emptyMessage = "ไม่พบข้อมูลสารสนเทศ",
 }: AppGridProps) {
     if (apps.length === 0) {
         return (
@@ -57,7 +57,7 @@ export default function AppGrid({
             <div className="mt-8 flex justify-center items-center gap-3 animate-fade-in delay-300">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50/50 backdrop-blur-sm border border-emerald-100/60 text-sm text-emerald-700">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    📚 {apps.filter(app => app.isEnabled !== false).length} แหล่งเรียนรู้พร้อมใช้งาน
+                    📚 {apps.filter(app => app.isEnabled !== false).length} ข้อมูลสารสนเทศพร้อมใช้งาน
                 </span>
 
                 {apps.filter(app => app.isEnabled === false).length > 0 && (
