@@ -32,7 +32,7 @@ function HomeLoading() {
           </svg>
         </div>
         <p className="text-slate-500 font-medium">กำลังโหลด...</p>
-        <p className="text-xs text-slate-400 mt-1">Hongson e-Learning</p>
+        <p className="text-xs text-slate-400 mt-1">HONGSON สารสนเทศ</p>
       </div>
     </div>
   );

@@ -93,7 +93,7 @@ export default function NotFound() {
             {/* Page Info */}
             <div className="mt-8 text-center">
                 <p className="text-xs text-slate-400">
-                    HONGSON THE ONE • Web App Center
+                    HONGSON สารสนเทศ • Web App Center
                 </p>
             </div>
         </main>

@@ -25,39 +25,31 @@ import {
     ChevronDown,
     ChevronRight,
     Lightbulb,
+    FileText,
 } from "lucide-react";
 import { AppData } from "./AppCard";
 import AdminLoginModal from "./AdminLoginModal";
-import { getApps, AppDocument, SubjectCategory, CATEGORY_NAMES, initializeDatabase } from "@/lib/firestore";
+import { getApps, AppDocument, SubjectCategory, CATEGORY_NAMES } from "@/lib/firestore";
 
-type Zone = "student" | "teacher";
+type Zone = "academic" | "budget" | "personnel" | "general";
+
+const ZONE_NAMES: Record<Zone, string> = {
+    academic: "วิชาการ",
+    budget: "งบประมาณ",
+    personnel: "บุคคล",
+    general: "บริหารทั่วไป",
+};
 
 // Icon mapping for each category
 const CATEGORY_ICONS: Record<SubjectCategory, React.ElementType> = {
-    general: Lightbulb,
-    thai: BookOpen,
-    math: Calculator,
-    science: Atom,
-    social: Globe,
-    foreign: Languages,
-    guidance: Compass,
-    health: Heart,
-    arts: Palette,
-    career: Briefcase,
+    docs: FileText,
+    links: Globe,
 };
 
 // Order of categories for display
 const CATEGORY_ORDER: SubjectCategory[] = [
-    "general",
-    "science",
-    "arts",
-    "thai",
-    "social",
-    "math",
-    "foreign",
-    "guidance",
-    "health",
-    "career",
+    "links",
+    "docs",
 ];
 
 // Convert Firestore AppDocument to AppData format
@@ -283,13 +275,19 @@ function CategorySection({ category, apps }: { category: SubjectCategory; apps: 
     );
 }
 
-// Zone Switcher Component - ตัวเลือกคลังครู/นักเรียน
+// Zone Switcher Component - ตัวเลือกหมวดหมู่ใหม่
 function ZoneSwitcher({ currentZone, onZoneChange }: { currentZone: Zone; onZoneChange: (zone: Zone) => void }) {
+    const zones: { id: Zone; label: string; icon: React.ElementType } = [
+        { id: "academic", label: "วิชาการ", icon: BookOpen },
+        { id: "budget", label: "งบประมาณ", icon: Calculator },
+        { id: "personnel", label: "บุคคล", icon: Briefcase },
+        { id: "general", label: "บริหารทั่วไป", icon: Globe },
+    ];
+
     return (
-        /* Adjust mb-6 to change spacing between the switcher and the content below */
-        <div className="flex justify-center mb-0">
+        <div className="flex justify-center mb-0 w-full overflow-x-auto py-2">
             <div
-                className="inline-flex items-center gap-1 p-2 rounded-full"
+                className="inline-flex items-center gap-1 p-2 rounded-full min-w-max"
                 style={{
                     background: "rgba(255, 255, 255, 0.75)",
                     backdropFilter: "blur(20px)",
@@ -297,50 +295,38 @@ function ZoneSwitcher({ currentZone, onZoneChange }: { currentZone: Zone; onZone
                     boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.9)",
                 }}
             >
-                {/* Teacher Zone */}
-                <button
-                    onClick={() => onZoneChange("teacher")}
-                    className={`flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 ${currentZone === "teacher"
-                        ? "bg-white text-slate-700 shadow-lg"
-                        : "text-slate-500 hover:text-slate-700"
-                        }`}
-                    style={{
-                        boxShadow: currentZone === "teacher"
-                            ? "0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.9)"
-                            : "none",
-                    }}
-                >
-                    <span className="font-bold text-lg sm:text-xl">คลังครู</span>
-                    <ArrowDown className={`w-6 h-6 transition-colors ${currentZone === "teacher" ? "text-emerald-500" : ""}`} />
-                </button>
-
-                {/* Student Zone */}
-                <button
-                    onClick={() => onZoneChange("student")}
-                    className={`flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 ${currentZone === "student"
-                        ? "bg-emerald-500 text-white shadow-lg"
-                        : "text-slate-500 hover:text-slate-700"
-                        }`}
-                    style={{
-                        boxShadow: currentZone === "student"
-                            ? "0 6px 20px rgba(16, 185, 129, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3)"
-                            : "none",
-                    }}
-                >
-                    <ArrowUp className="w-6 h-6" />
-                    <span className="font-bold text-lg sm:text-xl">คลังนักเรียน</span>
-                </button>
+                {zones.map((zone) => {
+                    const Icon = zone.icon;
+                    const isActive = currentZone === zone.id;
+                    return (
+                        <button
+                            key={zone.id}
+                            onClick={() => onZoneChange(zone.id)}
+                            className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full transition-all duration-300 ${isActive
+                                ? "bg-emerald-500 text-white shadow-lg"
+                                : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                                }`}
+                            style={{
+                                boxShadow: isActive
+                                    ? "0 4px 12px rgba(16, 185, 129, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3)"
+                                    : "none",
+                            }}
+                        >
+                            <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span className="font-bold text-sm sm:text-base">{zone.label}</span>
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );
 }
 
 export default function HomeContent() {
-    const [currentZone, setCurrentZone] = useState<Zone>("student");
+    const [currentZone, setCurrentZone] = useState<Zone>("academic");
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [apps, setApps] = useState<AppData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [isSeeding, setIsSeeding] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -378,48 +364,26 @@ export default function HomeContent() {
         router.push("/admin/dashboard");
     };
 
-    // Handle data seeding
-    const handleSeed = async () => {
-        setIsSeeding(true);
-        try {
-            await initializeDatabase();
-            await fetchApps();
-        } catch (err) {
-            console.error("Seeding failed", err);
-            setError("ไม่สามารถติดตั้งข้อมูลตัวอย่างได้");
-        } finally {
-            setIsSeeding(false);
-        }
-    };
-
     // Filter apps based on current zone
     const filteredApps = useMemo(() => {
         return apps.filter(
-            (app) => app.zone === currentZone || app.zone === "both"
+            (app) => app.zone === currentZone || app.zone === "all"
         );
     }, [apps, currentZone]);
 
     // Group apps by category
     const appsByCategory = useMemo(() => {
         const grouped: Record<SubjectCategory, AppData[]> = {
-            general: [],
-            thai: [],
-            math: [],
-            science: [],
-            social: [],
-            foreign: [],
-            guidance: [],
-            health: [],
-            arts: [],
-            career: [],
+            docs: [],
+            links: [],
         };
 
         filteredApps.forEach((app) => {
             if (app.category && grouped[app.category]) {
                 grouped[app.category].push(app);
             } else {
-                // ถ้าไม่มี category ให้ใส่ใน science เป็น default
-                grouped.science.push(app);
+                // ถ้าไม่มี category ให้ใส่ใน links เป็น default
+                grouped.links.push(app);
             }
         });
 
@@ -479,7 +443,7 @@ export default function HomeContent() {
                                         คลังสื่อการเรียนรู้ออนไลน์
                                     </h2>
                                     <span className="text-sm sm:text-base font-medium text-slate-500 mt-1 relative z-10 tracking-wide">
-                                        (HONGSON e-Learning)
+                                        (HONGSON สารสนเทศ)
                                     </span>
                                 </div>
                             </div>
@@ -538,22 +502,8 @@ export default function HomeContent() {
                                             <BookOpen className="w-10 h-10 text-emerald-300" />
                                         </div>
                                         <p className="text-slate-500 text-center mb-2">
-                                            ยังไม่มีสื่อการเรียนรู้สำหรับ{currentZone === "student" ? "นักเรียน" : "ครู"}
+                                            ยังไม่มีสื่อการเรียนรู้สำหรับหมวด{ZONE_NAMES[currentZone]}
                                         </p>
-
-                                        {/* Seed Button for Demo */}
-                                        <button
-                                            onClick={handleSeed}
-                                            disabled={isSeeding}
-                                            className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-100/50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50"
-                                        >
-                                            {isSeeding ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (
-                                                <Database className="w-4 h-4" />
-                                            )}
-                                            {isSeeding ? "กำลังติดตั้ง..." : "ติดตั้งข้อมูลตัวอย่าง"}
-                                        </button>
                                     </div>
                                 )}
                             </div>

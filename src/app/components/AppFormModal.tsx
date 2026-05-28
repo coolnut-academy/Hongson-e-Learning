@@ -16,12 +16,13 @@ import {
     ImageIcon,
     BookOpen,
     BookMarked,
+    Calculator,
 } from "lucide-react";
 import { uploadImage } from "@/lib/storage";
 import { AppDocument, SubjectCategory, CATEGORY_NAMES } from "@/lib/firestore";
 import AppCard from "./AppCard";
 
-type Zone = "student" | "teacher" | "both";
+type Zone = "academic" | "budget" | "personnel" | "general" | "all";
 
 interface AppFormModalProps {
     isOpen: boolean;
@@ -51,8 +52,8 @@ export default function AppFormModal({
 }: AppFormModalProps) {
     const [name, setName] = useState("");
     const [url, setUrl] = useState("");
-    const [zone, setZone] = useState<Zone>("both");
-    const [category, setCategory] = useState<SubjectCategory>("science");
+    const [zone, setZone] = useState<Zone>("all");
+    const [category, setCategory] = useState<SubjectCategory>("links");
     const [iconUrl, setIconUrl] = useState("");
     const [color, setColor] = useState(GRADIENT_OPTIONS[0].value);
     const [isUploading, setIsUploading] = useState(false);
@@ -74,8 +75,8 @@ export default function AppFormModal({
             // Reset form for new app
             setName("");
             setUrl("");
-            setZone("both");
-            setCategory("science");
+            setZone("all");
+            setCategory("links");
             setIconUrl("");
             setColor(GRADIENT_OPTIONS[0].value);
         }
@@ -299,44 +300,70 @@ export default function AppFormModal({
                                     <Users className="w-4 h-4 opacity-60" />
                                     แสดงในคลังความรู้
                                 </label>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {/* Student */}
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                                    {/* Academic */}
                                     <button
                                         type="button"
-                                        onClick={() => setZone("student")}
+                                        onClick={() => setZone("academic")}
                                         disabled={isSubmitting}
-                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "student"
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "academic"
+                                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                                            : "border-slate-200 hover:border-slate-300 text-slate-600"
+                                            }`}
+                                    >
+                                        <BookOpen className="w-5 h-5" />
+                                        <span className="text-xs font-medium">วิชาการ</span>
+                                    </button>
+                                    {/* Budget */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setZone("budget")}
+                                        disabled={isSubmitting}
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "budget"
                                             ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
-                                        <GraduationCap className="w-5 h-5" />
-                                        <span className="text-xs font-medium">นักเรียน</span>
+                                        <Calculator className="w-5 h-5" />
+                                        <span className="text-xs font-medium">งบประมาณ</span>
                                     </button>
-                                    {/* Teacher */}
+                                    {/* Personnel */}
                                     <button
                                         type="button"
-                                        onClick={() => setZone("teacher")}
+                                        onClick={() => setZone("personnel")}
                                         disabled={isSubmitting}
-                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "teacher"
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "personnel"
                                             ? "border-violet-500 bg-violet-50 text-violet-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
-                                        <Briefcase className="w-5 h-5" />
-                                        <span className="text-xs font-medium">ครู</span>
+                                        <Users className="w-5 h-5" />
+                                        <span className="text-xs font-medium">บุคคล</span>
                                     </button>
-                                    {/* Both */}
+                                    {/* General */}
                                     <button
                                         type="button"
-                                        onClick={() => setZone("both")}
+                                        onClick={() => setZone("general")}
                                         disabled={isSubmitting}
-                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "both"
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "general"
                                             ? "border-amber-500 bg-amber-50 text-amber-700"
                                             : "border-slate-200 hover:border-slate-300 text-slate-600"
                                             }`}
                                     >
                                         <Globe className="w-5 h-5" />
+                                        <span className="text-xs font-medium">บริหารทั่วไป</span>
+                                    </button>
+                                    {/* All */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setZone("all")}
+                                        disabled={isSubmitting}
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1.5 ${zone === "all"
+                                            ? "border-slate-500 bg-slate-50 text-slate-700"
+                                            : "border-slate-200 hover:border-slate-300 text-slate-600"
+                                            }`}
+                                    >
+                                        <Globe className="w-5 h-5 opacity-50" />
                                         <span className="text-xs font-medium">ทั้งหมด</span>
                                     </button>
                                 </div>

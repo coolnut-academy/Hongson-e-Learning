@@ -13,8 +13,8 @@ const kanit = Kanit({
 // SEO Metadata Configuration
 export const metadata: Metadata = {
   title: {
-    default: "Hongson e-Learning - คลังความรู้ดิจิทัล",
-    template: "%s | Hongson e-Learning",
+    default: "HONGSON สารสนเทศ - คลังความรู้ดิจิทัล",
+    template: "%s | HONGSON สารสนเทศ",
   },
   description:
     "แหล่งรวมสื่อการสอนและบทเรียนออนไลน์สำหรับครูและนักเรียน",
@@ -47,11 +47,11 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Hongson e-Learning - คลังความรู้ดิจิทัล",
+    title: "HONGSON สารสนเทศ - คลังความรู้ดิจิทัล",
     description: "คลังความรู้และสื่อการสอนดิจิทัลสำหรับครูและนักเรียน",
     type: "website",
     locale: "th_TH",
-    siteName: "Hongson e-Learning",
+    siteName: "HONGSON สารสนเทศ",
     images: [
       {
         url: "/og-image.png",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hongson e-Learning - คลังความรู้ดิจิทัล",
+    title: "HONGSON สารสนเทศ - คลังความรู้ดิจิทัล",
     description: "คลังความรู้และสื่อการสอนดิจิทัลสำหรับครูและนักเรียน",
     images: ["/og-image.png"],
   },

@@ -9,7 +9,7 @@ export interface AppData {
     name: string;
     url: string;
     iconUrl: string;
-    zone: "student" | "teacher" | "both";
+    zone: "academic" | "budget" | "personnel" | "general" | "all";
     category?: SubjectCategory;
     color?: string;
     isEnabled?: boolean;

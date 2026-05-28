@@ -21,6 +21,8 @@ import {
     RefreshCw,
     ToggleLeft,
     ToggleRight,
+    Calculator,
+    Users,
 } from "lucide-react";
 import {
     getApps,
@@ -94,25 +96,37 @@ function ConfirmModal({
 }
 
 // Zone Badge Component
-function ZoneBadge({ zone }: { zone: "student" | "teacher" | "both" }) {
+function ZoneBadge({ zone }: { zone: "academic" | "budget" | "personnel" | "general" | "all" }) {
     const config = {
-        student: {
-            icon: GraduationCap,
-            label: "นักเรียน",
+        academic: {
+            icon: BookOpen,
+            label: "วิชาการ",
+            bg: "bg-blue-100",
+            text: "text-blue-700",
+        },
+        budget: {
+            icon: Calculator,
+            label: "งบประมาณ",
             bg: "bg-emerald-100",
             text: "text-emerald-700",
         },
-        teacher: {
-            icon: Briefcase,
-            label: "ครู",
+        personnel: {
+            icon: Users,
+            label: "บุคคล",
             bg: "bg-violet-100",
             text: "text-violet-700",
         },
-        both: {
+        general: {
             icon: Globe,
-            label: "ทั้งหมด",
+            label: "บริหารทั่วไป",
             bg: "bg-amber-100",
             text: "text-amber-700",
+        },
+        all: {
+            icon: Globe,
+            label: "ทั้งหมด",
+            bg: "bg-slate-100",
+            text: "text-slate-700",
         },
     };
 
@@ -284,7 +298,7 @@ export default function AdminDashboard() {
                             <div className="relative">
                                 <Image
                                     src="/logo-main.png"
-                                    alt="Hongson e-Learning Logo"
+                                    alt="HONGSON สารสนเทศ Logo"
                                     width={48}
                                     height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
@@ -294,7 +308,7 @@ export default function AdminDashboard() {
                                 <h1 className="text-lg font-bold text-gradient">
                                     ศูนย์จัดการคลังความรู้
                                 </h1>
-                                <p className="text-xs text-slate-500">Hongson e-Learning</p>
+                                <p className="text-xs text-slate-500">HONGSON สารสนเทศ</p>
                             </div>
                         </div>
 
@@ -529,12 +543,20 @@ export default function AdminDashboard() {
                             <span>รวมทั้งหมด: <strong className="text-slate-700">{apps.length}</strong> รายการ</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <GraduationCap className="w-4 h-4 text-emerald-500" />
-                            <span>คลังนักเรียน: <strong className="text-slate-700">{apps.filter(a => a.zone === "student" || a.zone === "both").length}</strong></span>
+                            <BookOpen className="w-4 h-4 text-blue-500" />
+                            <span>วิชาการ: <strong className="text-slate-700">{apps.filter(a => a.zone === "academic" || a.zone === "all").length}</strong></span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-violet-500" />
-                            <span>คลังครู: <strong className="text-slate-700">{apps.filter(a => a.zone === "teacher" || a.zone === "both").length}</strong></span>
+                            <Calculator className="w-4 h-4 text-emerald-500" />
+                            <span>งบประมาณ: <strong className="text-slate-700">{apps.filter(a => a.zone === "budget" || a.zone === "all").length}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-violet-500" />
+                            <span>บุคคล: <strong className="text-slate-700">{apps.filter(a => a.zone === "personnel" || a.zone === "all").length}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Globe className="w-4 h-4 text-amber-500" />
+                            <span>บริหารทั่วไป: <strong className="text-slate-700">{apps.filter(a => a.zone === "general" || a.zone === "all").length}</strong></span>
                         </div>
                     </div>
                 )}
