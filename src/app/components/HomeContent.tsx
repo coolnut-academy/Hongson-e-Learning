@@ -86,33 +86,32 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
     return (
         <button
             onClick={handleClick}
-            className={`group flex flex-col items-center p-3 sm:p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 active:translate-y-0 w-[140px] sm:w-[180px] ${isEnabled
-                ? "bg-white cursor-pointer shadow-[0_4px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.15),0_8px_10px_-6px_rgba(0,0,0,0.1)] border border-slate-200 hover:border-slate-300"
-                : "bg-gray-50 cursor-not-allowed opacity-60 border border-slate-200"
-                }`}
+            className={`group flex flex-col items-center gap-2 p-2 outline-none focus:outline-none w-[110px] sm:w-[130px] transition-all duration-300 ${!isEnabled ? "cursor-not-allowed" : "cursor-pointer"}`}
             disabled={!isEnabled}
         >
             {/* Image/Icon Container */}
-            <div className={`w-full aspect-[1/1] mb-3 rounded-xl relative overflow-hidden ${colors.iconBg} border ${colors.border} transition-all duration-300 group-hover:shadow-sm`}>
-                {app.iconUrl && (app.iconUrl.startsWith("http") || app.iconUrl.startsWith("/") || app.iconUrl.startsWith("data:")) ? (
-                    <Image
-                        src={app.iconUrl}
-                        alt={app.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        priority={priority}
-                        sizes="(max-width: 768px) 140px, 180px"
-                    />
-                ) : (
-                    <div className="flex items-center justify-center w-full h-full">
-                        <DefaultIcon className={`w-12 h-12 sm:w-14 sm:h-14 ${colors.iconColor} drop-shadow-sm transition-transform duration-300 group-hover:scale-110`} />
-                    </div>
-                )}
+            <div className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-md shadow-black/10 transition-all duration-500 ease-out ${isEnabled ? "group-hover:scale-105 group-hover:shadow-xl" : "opacity-60 bg-slate-200/50"}`}>
+                <div className="absolute inset-0 flex items-center justify-center bg-transparent">
+                    {app.iconUrl && (app.iconUrl.startsWith("http") || app.iconUrl.startsWith("/") || app.iconUrl.startsWith("data:")) ? (
+                        <Image
+                            src={app.iconUrl}
+                            alt={app.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            priority={priority}
+                            sizes="(max-width: 768px) 128px, 128px"
+                        />
+                    ) : (
+                        <div className={`flex items-center justify-center w-full h-full ${colors.bg}`}>
+                            <DefaultIcon className={`w-10 h-10 ${colors.iconColor} drop-shadow-sm transition-transform duration-300 group-hover:scale-110`} />
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Title */}
             <span
-                className="text-xs sm:text-sm font-semibold text-slate-700 text-center line-clamp-2 leading-relaxed w-full px-1 group-hover:text-slate-900"
+                className="text-xs sm:text-sm font-medium text-slate-700 text-center line-clamp-2 leading-tight w-full px-1 group-hover:text-slate-900 transition-colors"
                 dangerouslySetInnerHTML={{ __html: app.name }}
             />
         </button>
