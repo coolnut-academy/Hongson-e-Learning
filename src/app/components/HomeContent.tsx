@@ -102,8 +102,8 @@ function EBookCard({ app, priority = false }: { app: AppData; priority?: boolean
                             sizes="(max-width: 768px) 128px, 128px"
                         />
                     ) : (
-                        <div className={`flex items-center justify-center w-full h-full ${colors.bg}`}>
-                            <DefaultIcon className={`w-10 h-10 ${colors.iconColor} drop-shadow-sm transition-transform duration-300 group-hover:scale-110`} />
+                        <div className={`flex items-center justify-center w-full h-full ${colors.solidBg}`}>
+                            <DefaultIcon className={`w-12 h-12 text-white drop-shadow-md transition-transform duration-300 group-hover:scale-110`} />
                         </div>
                     )}
                 </div>
@@ -126,6 +126,7 @@ const CATEGORY_COLORS: Record<SubjectCategory, {
     iconBg: string;
     iconColor: string;
     lightBg: string;
+    solidBg: string;
 }> = {
     docs: { // Blue Theme
         bg: "bg-blue-50",
@@ -133,7 +134,8 @@ const CATEGORY_COLORS: Record<SubjectCategory, {
         border: "border-blue-200",
         iconBg: "bg-blue-100",
         iconColor: "text-blue-600",
-        lightBg: "bg-blue-50/50"
+        lightBg: "bg-blue-50/50",
+        solidBg: "bg-gradient-to-br from-blue-500 to-blue-700"
     },
     links: { // Emerald/Teal Theme
         bg: "bg-emerald-50",
@@ -141,7 +143,8 @@ const CATEGORY_COLORS: Record<SubjectCategory, {
         border: "border-emerald-200",
         iconBg: "bg-emerald-100",
         iconColor: "text-emerald-600",
-        lightBg: "bg-emerald-50/50"
+        lightBg: "bg-emerald-50/50",
+        solidBg: "bg-gradient-to-br from-emerald-500 to-emerald-700"
     },
 };
 
